@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Registry — Задачи</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="logo" href="/">TASK REGISTRY</a>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <div class="layout">
+      <nav class="sidebar metal-panel">
+        <div class="sidebar-title">Main Menu</div>
+        <button type="button" class="nav-btn active" data-page="tasks">Задачи</button>
+        <button type="button" class="nav-btn" data-page="executors">Исполнители</button>
+        <button type="button" class="nav-btn" data-page="logs">Логи</button>
+        <button type="button" class="nav-btn" data-page="scheduler">Планировщик</button>
+        <button type="button" class="nav-btn" data-page="task-types">Типы задач</button>
+        <button type="button" class="nav-btn" data-page="empty">Пустой раздел</button>
+        <button type="button" class="nav-btn" data-page="help">Справка</button>
+      </nav>
+
+      <div class="main-area">
+        <div class="toolbar metal-panel" id="tasks-toolbar">
+          <button type="button" class="tool-btn" id="btn-new-task">Новая задача</button>
+          <button type="button" class="tool-btn" id="btn-abort-task">Прервать задачу</button>
+          <button type="button" class="tool-btn" id="btn-delete-task">Удалить задачу</button>
+        </div>
+
+        <div class="toolbar metal-panel hidden" id="executors-toolbar">
+          <button type="button" class="tool-btn" id="btn-add-executor">Добавить исполнителя</button>
+        </div>
+
+        <div class="toolbar metal-panel hidden" id="scheduler-toolbar">
+          <button type="button" class="tool-btn" id="btn-new-schedule">Новое расписание</button>
+          <button type="button" class="tool-btn" id="btn-toggle-schedule">Включить / выключить</button>
+          <button type="button" class="tool-btn" id="btn-delete-schedule">Удалить</button>
+        </div>
+
+        <div class="content-area">
+          <div class="page" id="page-tasks">
+            <div class="panel metal-panel">
+              <div class="panel-header">Задачи</div>
+              <table class="tasks-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Название</th>
+                    <th>Исполнитель</th>
+                    <th>Дата и время запуска</th>
+                    <th>Процент выполнения</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody id="tasks-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-executors">
+            <div class="panel metal-panel">
+              <div class="panel-header">Исполнители</div>
+              <table class="executors-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>ФИО</th>
+                    <th>Статус</th>
+                    <th>Успешных</th>
+                    <th>Ошибок</th>
+                    <th>Прерванных</th>
+                  </tr>
+                </thead>
+                <tbody id="executors-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-logs">
+            <div class="panel metal-panel">
+              <div class="panel-header">Журнал событий</div>
+              <table class="logs-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Задача №</th>
+                    <th>Название задачи</th>
+                    <th>Время</th>
+                    <th>Сообщение</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-scheduler">
+            <div class="panel metal-panel">
+              <div class="panel-header">Планировщик задач</div>
+              <table class="scheduler-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Задача</th>
+                    <th>Следующий запуск</th>
+                    <th>Повтор</th>
+                    <th>Статус</th>
+                    <th>Последний запуск</th>
+                  </tr>
+                </thead>
+                <tbody id="scheduler-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-task-types">
+            <div class="panel metal-panel">
+              <div class="panel-header">Справочник типов задач</div>
+              <table class="task-types-table">
+                <thead>
+                  <tr>
+                    <th>Код</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Параметры</th>
+                    <th>Пример</th>
+                  </tr>
+                </thead>
+                <tbody id="task-types-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-empty"></div>
+
+          <div class="page hidden" id="page-help">
+            <div class="panel metal-panel help-panel">
+              <h1 class="help-title">Справка</h1>
+              <p>
+                <strong>Система учёта задач</strong> — программа для ведения реестра
+                фоновых и регламентных заданий организации.
+              </p>
+              <p>
+                В разделе <strong>Задачи</strong> отображается таблица заданий.
+                Выберите строку щелчком мыши.
+                Панель инструментов позволяет создать, прервать или удалить задачу.
+              </p>
+              <p>
+                В разделе <strong>Исполнители</strong> — справочник сотрудников,
+                которым могут быть поручены задачи.
+              </p>
+              <p>
+                В разделе <strong>Логи</strong> — общий журнал записей по всем задачам.
+                Для просмотра лога одной задачи можно также дважды щёлкнуть по строке в таблице задач.
+              </p>
+              <p>
+                В разделе <strong>Типы задач</strong> — справочник всех поддерживаемых типов
+                с описанием параметров и примерами.
+              </p>
+              <p>
+                В разделе <strong>Планировщик</strong> — расписание автоматического создания задач.
+                Укажите тип, время первого запуска и при необходимости интервал повтора.
+                В нужный момент планировщик создаёт задачу со статусом «Ожидает», и её подхватывает исполнитель.
+              </p>
+
+              <section class="author-section">
+                <h2 class="author-heading">Об авторе</h2>
+                <div class="author-card">
+                  <img
+                    class="author-photo"
+                    src="images/author.jpg"
+                    width="120"
+                    height="120"
+                    alt="Кисоржевский Александр Дмитриевич"
+                  >
+                  <div class="author-info">
+                    <h3 class="author-name">Кисоржевский Александр Дмитриевич</h3>
+                    <p class="author-role">Автор программы</p>
+                    <p class="author-bio">
+                      Разработчик системы учёта задач. Шахматист, Москва.
+                      Профиль:
+                      <a href="https://vk.com/id13061960" target="_blank" rel="noopener noreferrer">ВКонтакте</a>,
+                      <a href="https://ratings.ruchess.ru/people/285513" target="_blank" rel="noopener noreferrer">ФШР</a>,
+                      <a href="https://ratings.fide.com/profile/54180465" target="_blank" rel="noopener noreferrer">FIDE</a>.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <p class="help-version">Версия 0.0.1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal-window metal-panel" id="task-modal-window">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Редактирование задачи</span>
+        <button type="button" class="modal-close-btn" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="modal-body modal-body-scroll">
+        <form id="edit-form" class="edit-form">
+          <div class="form-row edit-only hidden">
+            <label for="edit-id">№</label>
+            <input type="text" id="edit-id" name="id" readonly>
+          </div>
+          <div class="form-row">
+            <label for="edit-type">Тип</label>
+            <select id="edit-type" name="type" required></select>
+          </div>
+          <div class="form-row hidden" id="edit-parameters-row">
+            <label for="edit-parameters-formula" id="edit-parameters-label">Параметры</label>
+            <input type="text" id="edit-parameters-formula" class="hidden" placeholder="2 + 3 * (4 - 1)">
+            <textarea id="edit-parameters-json" class="task-params-textarea hidden" rows="6"></textarea>
+            <p class="field-hint" id="edit-parameters-hint"></p>
+          </div>
+          <div class="form-row hidden" id="edit-batch-builder">
+            <div class="batch-builder-header">
+              <label>Подзадачи</label>
+              <button type="button" class="tool-btn batch-add-step-btn" id="edit-batch-add-step">+ Добавить шаг</button>
+            </div>
+            <div id="edit-batch-steps" class="batch-steps"></div>
+            <p class="field-hint">Шаги выполняются по порядку внутри одной пакетной задачи.</p>
+          </div>
+          <div class="form-row edit-only hidden">
+            <label for="edit-executor">Исполнитель</label>
+            <input type="text" id="edit-executor" name="executor" readonly>
+          </div>
+          <div class="form-row edit-only hidden">
+            <label for="edit-datetime">Дата и время запуска</label>
+            <input type="text" id="edit-datetime" name="datetime" readonly>
+          </div>
+          <div class="form-row edit-only hidden">
+            <label for="edit-status">Статус</label>
+            <select id="edit-status" name="status" required>
+              <option value="NEW">Ожидает</option>
+              <option value="IN_PROGRESS">Выполняется</option>
+              <option value="DONE">Выполнено</option>
+              <option value="ABORTED">Прервано</option>
+              <option value="ERROR">Ошибка</option>
+            </select>
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="win-btn">Сохранить</button>
+            <button type="button" class="win-btn" id="cancel-btn">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="log-modal-overlay">
+    <div class="modal-window metal-panel log-modal-window">
+      <div class="modal-header">
+        <span class="modal-title" id="log-modal-title">Лог задачи</span>
+        <button type="button" class="modal-close-btn log-modal-close-btn" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="modal-body log-modal-body">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Время</th>
+              <th>Сообщение</th>
+            </tr>
+          </thead>
+          <tbody id="log-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="schedule-modal-overlay">
+    <div class="modal-window metal-panel" id="schedule-modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Новое расписание</span>
+        <button type="button" class="modal-close-btn schedule-modal-close-btn" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="modal-body modal-body-scroll">
+        <form id="schedule-form" class="edit-form">
+          <div class="form-row">
+            <label for="schedule-type">Тип задачи</label>
+            <select id="schedule-type" name="type" required></select>
+          </div>
+          <div class="form-row hidden" id="schedule-parameters-row">
+            <label for="schedule-parameters" id="schedule-parameters-label">Параметры</label>
+            <input type="text" id="schedule-parameters-formula" class="hidden" placeholder="2 + 3 * (4 - 1)">
+            <textarea id="schedule-parameters-json" class="task-params-textarea hidden" rows="6"></textarea>
+            <p class="field-hint" id="schedule-parameters-hint"></p>
+          </div>
+          <div class="form-row hidden" id="schedule-batch-builder">
+            <div class="batch-builder-header">
+              <label>Подзадачи</label>
+              <button type="button" class="tool-btn batch-add-step-btn" id="schedule-batch-add-step">+ Добавить шаг</button>
+            </div>
+            <div id="schedule-batch-steps" class="batch-steps"></div>
+            <p class="field-hint">Шаги выполняются по порядку внутри одной пакетной задачи.</p>
+          </div>
+          <div class="form-row">
+            <label for="schedule-next-run">Следующий запуск</label>
+            <input type="datetime-local" id="schedule-next-run" name="nextRunAt" required>
+          </div>
+          <div class="form-row">
+            <label for="schedule-repeat">Повтор (минуты, необязательно)</label>
+            <input type="number" id="schedule-repeat" name="repeatIntervalMinutes" min="1" placeholder="Оставьте пустым для однократного запуска">
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="win-btn">Создать</button>
+            <button type="button" class="win-btn" id="schedule-cancel-btn">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="message-modal-overlay">
+    <div class="modal-window metal-panel message-modal-window">
+      <div class="modal-header">
+        <span class="modal-title" id="message-modal-title">Сообщение</span>
+        <button type="button" class="modal-close-btn message-modal-close-btn" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="message-modal-text" id="message-modal-text"></p>
+        <div class="form-buttons message-modal-buttons">
+          <button type="button" class="win-btn" id="message-modal-ok">OK</button>
+          <button type="button" class="win-btn hidden" id="message-modal-cancel">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
