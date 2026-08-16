@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import ru.asocial.task.dto.PageResponse;
 import ru.asocial.task.dto.TaskCreateRequest;
 import ru.asocial.task.dto.TaskLogResponse;
 import ru.asocial.task.dto.TaskResponse;
@@ -49,8 +51,10 @@ public class TaskController {
 	}
 
 	@GetMapping
-	public List<TaskTableRowResponse> getTasksForTable() {
-		return taskService.getTasksForTable();
+	public PageResponse<TaskTableRowResponse> getTasksForTable(
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		return taskService.getTasksForTable(page, size);
 	}
 
 	@GetMapping("/{id}/logs")

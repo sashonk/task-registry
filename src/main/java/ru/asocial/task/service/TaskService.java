@@ -4,9 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.asocial.task.dto.PageResponse;
 import ru.asocial.task.dto.TaskCreateRequest;
 import ru.asocial.task.dto.TaskResponse;
 import ru.asocial.task.dto.TaskTableRowResponse;
@@ -65,11 +70,19 @@ public class TaskService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<TaskTableRowResponse> getTasksForTable() {
-		return taskRepository.findAll().stream()
+	public PageResponse<TaskTableRowResponse> getTasksForTable(int page, int size) {
+		int normalizedPage = PageResponse.normalizePage(page);
+		int normalizedSize = PageResponse.normalizeSize(size);
+		Pageable pageable = PageRequest.of(
+				normalizedPage - 1,
+				normalizedSize,
+				Sort.by(Sort.Direction.DESC, "createdAt", "id"));
+
+		Page<TaskTableRowResponse> result = taskRepository.findAllByOrderByCreatedAtDescIdDesc(pageable)
 				.map(this::toResponse)
-				.map(TaskTableRowResponse::from)
-				.toList();
+				.map(TaskTableRowResponse::from);
+
+		return PageResponse.from(result);
 	}
 
 	@Transactional

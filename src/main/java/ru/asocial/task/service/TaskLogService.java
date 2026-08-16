@@ -3,9 +3,14 @@ package ru.asocial.task.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.asocial.task.dto.PageResponse;
 import ru.asocial.task.dto.TaskLogResponse;
 import ru.asocial.task.dto.TaskLogTableRowResponse;
 import ru.asocial.task.model.Task;
@@ -45,10 +50,18 @@ public class TaskLogService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<TaskLogTableRowResponse> getAllLogsForTable() {
-		return taskLogRepository.findAllWithTaskOrderByCreatedAtDesc().stream()
-				.map(this::toTableRow)
-				.toList();
+	public PageResponse<TaskLogTableRowResponse> getAllLogsForTable(int page, int size) {
+		int normalizedPage = PageResponse.normalizePage(page);
+		int normalizedSize = PageResponse.normalizeSize(size);
+		Pageable pageable = PageRequest.of(
+				normalizedPage - 1,
+				normalizedSize,
+				Sort.by(Sort.Direction.DESC, "createdAt", "id"));
+
+		Page<TaskLogTableRowResponse> result = taskLogRepository.findAllByOrderByCreatedAtDescIdDesc(pageable)
+				.map(this::toTableRow);
+
+		return PageResponse.from(result);
 	}
 
 	private TaskLogTableRowResponse toTableRow(TaskLog log) {

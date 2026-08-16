@@ -1,0 +1,80 @@
+import { PAGE_TITLES } from "./constants.js";
+import { state } from "./state.js";
+import { showError, closeMessageModal } from "./messages.js";
+import { loadTasks, startTasksAutoRefresh, stopTasksAutoRefresh } from "./tasks.js";
+import { loadAllLogs, startLogsAutoRefresh, stopLogsAutoRefresh } from "./logs.js";
+import { loadExecutors } from "./executors.js";
+import { loadSchedules, startSchedulerAutoRefresh, stopSchedulerAutoRefresh, closeScheduleModal } from "./scheduler.js";
+import { loadTaskTypes } from "./task-types.js";
+import { closeModal } from "./task-modal.js";
+import { closeLogModal } from "./logs.js";
+
+export function showPage(page) {
+  state.currentPage = page;
+
+  document.querySelectorAll(".page").forEach(section => {
+    section.classList.add("hidden");
+  });
+  document.getElementById(`page-${page}`).classList.remove("hidden");
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.page === page);
+  });
+
+  document.getElementById("tasks-toolbar").classList.toggle("hidden", page !== "tasks");
+  document.getElementById("executors-toolbar").classList.toggle("hidden", page !== "executors");
+  document.getElementById("scheduler-toolbar").classList.toggle("hidden", page !== "scheduler");
+  document.title = PAGE_TITLES[page];
+
+  stopTasksAutoRefresh();
+  stopLogsAutoRefresh();
+  stopSchedulerAutoRefresh();
+
+  if (page === "tasks") {
+    loadTasks().catch(showError);
+    startTasksAutoRefresh();
+  } else if (page === "executors") {
+    loadExecutors().catch(showError);
+  } else if (page === "logs") {
+    loadAllLogs().catch(showError);
+    startLogsAutoRefresh();
+  } else if (page === "scheduler") {
+    loadSchedules().catch(showError);
+    startSchedulerAutoRefresh();
+  } else if (page === "task-types") {
+    loadTaskTypes().catch(showError);
+  }
+}
+
+export function initNavigation() {
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => showPage(btn.dataset.page));
+  });
+}
+
+export function initEscapeHandler() {
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (!document.getElementById("message-modal-overlay").classList.contains("hidden")) {
+      closeMessageModal(state.messageModalMode === "confirm" ? false : true);
+      return;
+    }
+
+    if (!document.getElementById("schedule-modal-overlay").classList.contains("hidden")) {
+      closeScheduleModal();
+      return;
+    }
+
+    if (!document.getElementById("log-modal-overlay").classList.contains("hidden")) {
+      closeLogModal();
+      return;
+    }
+
+    if (!document.getElementById("modal-overlay").classList.contains("hidden")) {
+      closeModal();
+    }
+  });
+}

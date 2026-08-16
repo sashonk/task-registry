@@ -3,6 +3,9 @@ package ru.asocial.task.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +20,9 @@ public interface TaskLogRepository extends JpaRepository<TaskLog, Long> {
 
 	@Query("SELECT l FROM TaskLog l JOIN FETCH l.task ORDER BY l.createdAt DESC, l.id DESC")
 	List<TaskLog> findAllWithTaskOrderByCreatedAtDesc();
+
+	@EntityGraph(attributePaths = "task")
+	Page<TaskLog> findAllByOrderByCreatedAtDescIdDesc(Pageable pageable);
 
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query("DELETE FROM TaskLog l WHERE l.createdAt < :cutoff")

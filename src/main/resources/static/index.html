@@ -47,7 +47,10 @@
         <div class="content-area">
           <div class="page" id="page-tasks">
             <div class="panel metal-panel">
-              <div class="panel-header">Задачи</div>
+              <div class="panel-header">
+                <span class="panel-header-title">Задачи</span>
+                <span class="panel-header-count" id="tasks-header-count"></span>
+              </div>
               <table class="tasks-table">
                 <thead>
                   <tr>
@@ -61,6 +64,15 @@
                 </thead>
                 <tbody id="tasks-body"></tbody>
               </table>
+              <div class="pagination-bar" id="tasks-pagination">
+                <button type="button" class="pagination-btn" id="tasks-page-prev">← Назад</button>
+                <label class="pagination-goto">
+                  Страница
+                  <input type="number" class="pagination-input" id="tasks-page-input" min="1" value="1">
+                  из <span id="tasks-page-total">1</span>
+                </label>
+                <button type="button" class="pagination-btn" id="tasks-page-next">Вперёд →</button>
+              </div>
             </div>
           </div>
 
@@ -85,7 +97,10 @@
 
           <div class="page hidden" id="page-logs">
             <div class="panel metal-panel">
-              <div class="panel-header">Журнал событий</div>
+              <div class="panel-header">
+                <span class="panel-header-title">Журнал событий</span>
+                <span class="panel-header-count" id="logs-header-count"></span>
+              </div>
               <table class="logs-table">
                 <thead>
                   <tr>
@@ -98,6 +113,15 @@
                 </thead>
                 <tbody id="logs-body"></tbody>
               </table>
+              <div class="pagination-bar" id="logs-pagination">
+                <button type="button" class="pagination-btn" id="logs-page-prev">← Назад</button>
+                <label class="pagination-goto">
+                  Страница
+                  <input type="number" class="pagination-input" id="logs-page-input" min="1" value="1">
+                  из <span id="logs-page-total">1</span>
+                </label>
+                <button type="button" class="pagination-btn" id="logs-page-next">Вперёд →</button>
+              </div>
             </div>
           </div>
 
@@ -345,6 +369,6 @@
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -243,6 +243,10 @@ body::after {
 }
 
 .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   font-family: "Russo One", sans-serif;
   font-size: 12px;
   color: var(--duke-cyan);
@@ -252,6 +256,79 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-shadow: 0 0 8px rgba(102, 204, 255, 0.5);
+}
+
+.panel-header-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-header-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  color: var(--duke-yellow);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(255, 204, 0, 0.25);
+}
+
+.pagination-btn {
+  font-family: "Russo One", sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: var(--duke-cyan);
+  background: linear-gradient(180deg, #1a4060 0%, #0a2038 100%);
+  border: 2px solid var(--duke-yellow);
+  padding: 8px 12px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: var(--duke-yellow);
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.35);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination-goto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  color: var(--duke-text);
+}
+
+.pagination-input {
+  width: 56px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  padding: 4px 6px;
+  border: 2px solid var(--duke-yellow);
+  background: #0a2038;
+  color: var(--duke-green);
+  text-align: center;
+}
+
+.pagination-input:focus {
+  outline: none;
+  border-color: var(--duke-cyan);
 }
 
 .help-panel {
