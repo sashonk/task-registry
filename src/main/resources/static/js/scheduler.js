@@ -1,4 +1,5 @@
 import { SCHEDULER_REFRESH_MS, TYPES_WITHOUT_PARAMETERS, TYPES_WITH_OPTIONAL_PARAMETERS } from "./constants.js";
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { formatDateTime, defaultScheduleDateTime } from "./utils.js";
 import { validateBatchBuilder } from "./batch-builder.js";
@@ -46,7 +47,7 @@ export function renderSchedules() {
 }
 
 export async function loadSchedules() {
-  const response = await fetch("/api/schedules");
+  const response = await apiFetch("/api/schedules");
   if (!response.ok) {
     throw new Error("Не удалось загрузить расписание");
   }
@@ -138,7 +139,7 @@ async function createSchedule(event) {
     payload.repeatIntervalMinutes = repeatIntervalMinutes;
   }
 
-  const response = await fetch("/api/schedules", {
+  const response = await apiFetch("/api/schedules", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
@@ -166,7 +167,7 @@ async function toggleSelectedSchedule() {
     return;
   }
 
-  const response = await fetch(`/api/schedules/${state.selectedScheduleId}/enabled`, {
+  const response = await apiFetch(`/api/schedules/${state.selectedScheduleId}/enabled`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ enabled: !schedule.enabled })
@@ -195,7 +196,7 @@ async function deleteSelectedSchedule() {
     return;
   }
 
-  const response = await fetch(`/api/schedules/${state.selectedScheduleId}`, {
+  const response = await apiFetch(`/api/schedules/${state.selectedScheduleId}`, {
     method: "DELETE"
   });
 

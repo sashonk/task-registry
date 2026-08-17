@@ -11,6 +11,11 @@
   <header class="app-header">
     <div class="header-inner">
       <a class="logo" href="/">TASK REGISTRY</a>
+      <div class="header-user">
+        <span id="header-username" class="header-user-name"></span>
+        <span id="header-role" class="header-user-role"></span>
+        <button type="button" class="tool-btn header-logout-btn" id="btn-logout">Выход</button>
+      </div>
     </div>
   </header>
 
@@ -23,7 +28,6 @@
         <button type="button" class="nav-btn" data-page="logs">Логи</button>
         <button type="button" class="nav-btn" data-page="scheduler">Планировщик</button>
         <button type="button" class="nav-btn" data-page="task-types">Типы задач</button>
-        <button type="button" class="nav-btn" data-page="empty">Пустой раздел</button>
         <button type="button" class="nav-btn" data-page="help">Справка</button>
       </nav>
 
@@ -161,8 +165,6 @@
               </table>
             </div>
           </div>
-
-          <div class="page hidden" id="page-empty"></div>
 
           <div class="page hidden" id="page-help">
             <div class="panel metal-panel help-panel">

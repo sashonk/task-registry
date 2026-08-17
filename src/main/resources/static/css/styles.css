@@ -97,6 +97,56 @@ body::after {
   text-shadow: 1px 1px 0 #000;
 }
 
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.header-user-name {
+  font-family: "Russo One", sans-serif;
+  font-size: 11px;
+  color: var(--duke-yellow);
+  text-transform: uppercase;
+}
+
+.header-user-role {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  color: var(--duke-cyan);
+}
+
+.header-logout-btn {
+  padding: 6px 10px;
+  font-size: 10px;
+}
+
+.login-shell {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.login-panel {
+  width: 420px;
+  max-width: 100%;
+}
+
+.login-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-error {
+  color: var(--duke-red);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .app-shell {
   max-width: 1100px;
   margin: 16px auto;
@@ -179,13 +229,13 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
-  color: var(--duke-yellow);
-  background: linear-gradient(180deg, #c04020 0%, #802010 50%, #601008 100%);
+  color: #fff;
+  background: linear-gradient(180deg, #3080c0 0%, #2060a0 50%, #104080 100%);
   border: 2px solid;
-  border-color: #ff8855 #501008 #401008 #ff6644;
+  border-color: var(--duke-cyan) #104080 #083060 var(--duke-cyan);
   padding: 9px 14px;
   text-shadow: 1px 1px 0 #000;
-  box-shadow: 0 3px 0 #300804;
+  box-shadow: 0 3px 0 #083060;
   transition: transform 0.08s, filter 0.1s;
 }
 
@@ -194,40 +244,33 @@ body::after {
   text-align: left;
 }
 
-.nav-btn:hover,
+.nav-btn:hover:not(.active),
 .tool-btn:hover,
 .win-btn:hover {
   filter: brightness(1.15);
   color: #fff;
 }
 
-.nav-btn:active,
 .tool-btn:active,
 .win-btn:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 #300804;
-}
-
-.nav-btn.active {
-  background: linear-gradient(180deg, #3080c0 0%, #2060a0 50%, #104080 100%);
-  border-color: var(--duke-cyan) #104080 #083060 var(--duke-cyan);
-  color: #fff;
+  border-color: #083060 #2060a0 var(--duke-cyan) #104080;
   box-shadow:
-    0 3px 0 #083060,
-    inset 0 0 12px rgba(102, 204, 255, 0.3);
+    0 1px 0 #083060,
+    inset 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-#btn-abort-task {
-  background: linear-gradient(180deg, #886620 0%, #604010 50%, #403008 100%);
-  border-color: #ccaa44 #302008 #201808 #aa8833;
-  box-shadow: 0 3px 0 #201808;
-}
-
-#btn-delete-task {
-  background: linear-gradient(180deg, #802020 0%, #601010 50%, #400808 100%);
-  border-color: #ff4444 #300808 #200404 #cc2222;
-  box-shadow: 0 3px 0 #200404;
-  color: #ffcccc;
+.nav-btn:active,
+.nav-btn.active,
+.nav-btn.active:hover {
+  transform: translateY(2px);
+  color: #fff;
+  filter: none;
+  background: linear-gradient(180deg, #c04020 0%, #802010 50%, #601008 100%);
+  border-color: #ff8855 #501008 #401008 #ff6644;
+  box-shadow:
+    0 1px 0 #300804,
+    inset 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .content-area {
@@ -867,20 +910,6 @@ tr.selected:hover {
   margin-top: 4px;
   padding-top: 14px;
   border-top: 2px solid var(--duke-border);
-}
-
-.win-btn[type="submit"] {
-  background: linear-gradient(180deg, #208040 0%, #106030 50%, #084020 100%);
-  border-color: #44ff88 #084020 #063018 #33cc66;
-  box-shadow: 0 3px 0 #063018;
-  color: #fff;
-}
-
-#cancel-btn {
-  background: linear-gradient(180deg, #505860 0%, #303840 50%, #202830 100%);
-  border-color: #8898a8 #202830 #182028 #687888;
-  box-shadow: 0 3px 0 #182028;
-  color: var(--duke-text);
 }
 
 .log-table td:last-child {

@@ -1,4 +1,5 @@
 import { PAGE_SIZE } from "./constants.js";
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { showError } from "./messages.js";
 
@@ -77,7 +78,7 @@ export function initPagination(loadTasks, loadAllLogs) {
 }
 
 export async function fetchPaginated(url, page, errorMessage = "Не удалось загрузить данные") {
-  const response = await fetch(`${url}?page=${page}&size=${PAGE_SIZE}`);
+  const response = await apiFetch(`${url}?page=${page}&size=${PAGE_SIZE}`);
   if (!response.ok) {
     throw new Error(errorMessage);
   }

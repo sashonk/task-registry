@@ -1,4 +1,5 @@
 import { LOG_REFRESH_MS } from "./constants.js";
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { formatDateTime } from "./utils.js";
 import { applyPaginationResult, fetchPaginated, updatePaginationControls } from "./pagination.js";
@@ -63,7 +64,7 @@ export function stopLogsAutoRefresh() {
 }
 
 async function loadTaskLogs(taskId) {
-  const response = await fetch(`/api/tasks/${taskId}/logs`);
+  const response = await apiFetch(`/api/tasks/${taskId}/logs`);
   if (!response.ok) {
     throw new Error("Не удалось загрузить лог задачи");
   }

@@ -1,3 +1,4 @@
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { showError } from "./messages.js";
 
@@ -26,7 +27,7 @@ export function renderExecutors() {
 }
 
 export async function loadExecutors() {
-  const response = await fetch("/api/executors");
+  const response = await apiFetch("/api/executors");
   if (!response.ok) {
     throw new Error("Не удалось загрузить исполнителей");
   }
@@ -36,7 +37,7 @@ export async function loadExecutors() {
 }
 
 async function addExecutor() {
-  const response = await fetch("/api/executors/worker", {
+  const response = await apiFetch("/api/executors/worker", {
     method: "POST"
   });
 

@@ -7,18 +7,31 @@ import { initExecutorsToolbar } from "./executors.js";
 import { initScheduler } from "./scheduler.js";
 import { initTaskModal } from "./task-modal.js";
 import { initNavigation, initEscapeHandler, showPage } from "./navigation.js";
+import { ensureAuthenticated, initAuthUi, applyRoleRestrictions } from "./auth.js";
+import { state } from "./state.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadTaskTypes().catch(showError).finally(() => {
-    initNavigation();
-    initTasksToolbar();
-    initExecutorsToolbar();
-    initScheduler();
-    initTaskModal();
-    initLogModal();
-    initMessageModal();
-    initPagination(loadTasks, loadAllLogs);
-    initEscapeHandler();
-    showPage("tasks");
-  });
+  ensureAuthenticated()
+    .then(() => {
+      initAuthUi();
+      applyRoleRestrictions();
+      return loadTaskTypes();
+    })
+    .then(() => {
+      initNavigation();
+      initTasksToolbar();
+      initExecutorsToolbar();
+      initScheduler();
+      initTaskModal();
+      initLogModal();
+      initMessageModal();
+      initPagination(loadTasks, loadAllLogs);
+      initEscapeHandler();
+      showPage("tasks");
+    })
+    .catch(error => {
+      if (state.currentUser) {
+        showError(error);
+      }
+    });
 });

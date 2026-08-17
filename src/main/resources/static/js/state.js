@@ -30,5 +30,6 @@ export const state = {
   logTaskId: null,
   logModalRefreshTimer: null,
   messageModalResolver: null,
-  messageModalMode: "alert"
+  messageModalMode: "alert",
+  currentUser: null
 };

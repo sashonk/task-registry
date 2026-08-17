@@ -12,7 +12,6 @@ export const PAGE_TITLES = {
   logs: "Task Registry — Логи",
   scheduler: "Task Registry — Планировщик",
   "task-types": "Task Registry — Типы задач",
-  empty: "Task Registry — Пустой раздел",
   help: "Task Registry — Справка"
 };
 

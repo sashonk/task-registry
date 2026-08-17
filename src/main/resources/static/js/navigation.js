@@ -1,5 +1,6 @@
 import { PAGE_TITLES } from "./constants.js";
 import { state } from "./state.js";
+import { isAdmin } from "./auth.js";
 import { showError, closeMessageModal } from "./messages.js";
 import { loadTasks, startTasksAutoRefresh, stopTasksAutoRefresh } from "./tasks.js";
 import { loadAllLogs, startLogsAutoRefresh, stopLogsAutoRefresh } from "./logs.js";
@@ -21,9 +22,9 @@ export function showPage(page) {
     btn.classList.toggle("active", btn.dataset.page === page);
   });
 
-  document.getElementById("tasks-toolbar").classList.toggle("hidden", page !== "tasks");
-  document.getElementById("executors-toolbar").classList.toggle("hidden", page !== "executors");
-  document.getElementById("scheduler-toolbar").classList.toggle("hidden", page !== "scheduler");
+  document.getElementById("tasks-toolbar").classList.toggle("hidden", page !== "tasks" || !isAdmin());
+  document.getElementById("executors-toolbar").classList.toggle("hidden", page !== "executors" || !isAdmin());
+  document.getElementById("scheduler-toolbar").classList.toggle("hidden", page !== "scheduler" || !isAdmin());
   document.title = PAGE_TITLES[page];
 
   stopTasksAutoRefresh();

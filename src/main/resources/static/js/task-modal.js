@@ -1,4 +1,5 @@
 import { TYPES_WITHOUT_PARAMETERS, TYPES_WITH_OPTIONAL_PARAMETERS } from "./constants.js";
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { formatDateTime } from "./utils.js";
 import { validateBatchBuilder } from "./batch-builder.js";
@@ -26,7 +27,7 @@ export function closeModal() {
 }
 
 async function openModal(taskId) {
-  const response = await fetch(`/api/tasks/${taskId}`);
+  const response = await apiFetch(`/api/tasks/${taskId}`);
   if (!response.ok) {
     showError(new Error("Не удалось загрузить задачу"));
     return;
@@ -85,7 +86,7 @@ async function createNewTaskRequest() {
     payload.parameters = parameters;
   }
 
-  const response = await fetch("/api/tasks", {
+  const response = await apiFetch("/api/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
@@ -111,7 +112,7 @@ async function saveTask(event) {
   }
 
   const status = document.getElementById("edit-status").value;
-  const response = await fetch(`/api/tasks/${state.editingTaskId}/status`, {
+  const response = await apiFetch(`/api/tasks/${state.editingTaskId}/status`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status })

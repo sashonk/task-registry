@@ -1,3 +1,4 @@
+import { apiFetch } from "./api.js";
 import { TASKS_REFRESH_MS } from "./constants.js";
 import { state } from "./state.js";
 import { mapTaskFromApi } from "./utils.js";
@@ -104,7 +105,7 @@ export async function abortSelectedTask() {
     return;
   }
 
-  const response = await fetch(`/api/tasks/${state.selectedTaskId}/status`, {
+  const response = await apiFetch(`/api/tasks/${state.selectedTaskId}/status`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status: "ABORTED" })

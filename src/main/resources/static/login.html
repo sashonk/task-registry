@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Registry — Вход</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="logo" href="/">TASK REGISTRY</a>
+    </div>
+  </header>
+
+  <div class="app-shell login-shell">
+    <div class="panel metal-panel login-panel">
+      <div class="panel-header">
+        <span class="panel-header-title">Вход в систему</span>
+      </div>
+      <form id="login-form" class="login-form">
+        <div class="form-row">
+          <label for="login-username">Пользователь</label>
+          <input type="text" id="login-username" name="username" autocomplete="username" required>
+        </div>
+        <div class="form-row">
+          <label for="login-password">Пароль</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+        </div>
+        <p id="login-error" class="login-error hidden"></p>
+        <div class="form-buttons">
+          <button type="submit" class="win-btn">Войти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

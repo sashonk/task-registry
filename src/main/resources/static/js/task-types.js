@@ -1,3 +1,4 @@
+import { apiFetch } from "./api.js";
 import { state } from "./state.js";
 import { escapeHtml } from "./utils.js";
 import { populateTaskTypeSelect } from "./parameters.js";
@@ -29,7 +30,7 @@ export function renderTaskTypes(catalog) {
 }
 
 export async function loadTaskTypes() {
-  const response = await fetch("/api/task-types");
+  const response = await apiFetch("/api/task-types");
   if (!response.ok) {
     throw new Error("Не удалось загрузить справочник типов задач");
   }
