@@ -13,14 +13,17 @@ import ru.asocial.task.exception.ResourceNotFoundException;
 import ru.asocial.task.model.Executor;
 import ru.asocial.task.model.ExecutorState;
 import ru.asocial.task.repository.ExecutorRepository;
+import ru.asocial.task.repository.TaskRepository;
 
 @Service
 public class ExecutorService {
 
 	private final ExecutorRepository executorRepository;
+	private final TaskRepository taskRepository;
 
-	public ExecutorService(ExecutorRepository executorRepository) {
+	public ExecutorService(ExecutorRepository executorRepository, TaskRepository taskRepository) {
 		this.executorRepository = executorRepository;
+		this.taskRepository = taskRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -83,6 +86,19 @@ public class ExecutorService {
 		Executor executor = getExecutorEntity(id);
 		executor.setState(state);
 		executorRepository.save(executor);
+	}
+
+	@Transactional
+	public void deleteExecutor(Long id) {
+		Executor executor = executorRepository.findByIdForUpdate(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Executor not found: " + id));
+
+		if (taskRepository.existsByExecutor_Id(id)) {
+			throw new BadRequestException("Нельзя удалить исполнителя, у которого есть задачи");
+		}
+
+		taskRepository.detachExecutor(id);
+		executorRepository.delete(executor);
 	}
 
 	private ExecutorResponse toResponse(Executor executor) {

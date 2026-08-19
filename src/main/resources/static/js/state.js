@@ -23,6 +23,7 @@ export const state = {
   editingTaskId: null,
   selectedTaskId: null,
   selectedScheduleId: null,
+  selectedExecutorId: null,
   currentPage: "tasks",
   tasksRefreshTimer: null,
   logsRefreshTimer: null,

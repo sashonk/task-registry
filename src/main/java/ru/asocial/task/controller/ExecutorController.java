@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,5 +58,16 @@ public class ExecutorController {
 	@PatchMapping("/{id}/state")
 	public ExecutorResponse updateExecutorState(@PathVariable Long id, @RequestBody ExecutorStateUpdateRequest request) {
 		return executorService.updateExecutorState(id, request.state());
+	}
+
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteExecutor(@PathVariable Long id) {
+		WorkerService worker = workerService.getIfAvailable();
+		if (worker != null) {
+			worker.stopAndDelete(id);
+			return;
+		}
+		executorService.deleteExecutor(id);
 	}
 }

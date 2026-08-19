@@ -131,10 +131,10 @@ public class TaskService {
 
 	@Transactional
 	public Optional<Task> claimNextTask(Long executorId) {
-		Executor executor = executorRepository.findById(executorId)
+		Executor executor = executorRepository.findByIdForUpdate(executorId)
 				.orElseThrow(() -> new ResourceNotFoundException("Executor not found: " + executorId));
 
-		if (executor.getState() == ExecutorState.WORKING) {
+		if (executor.getState() != ExecutorState.IDLE) {
 			return Optional.empty();
 		}
 
@@ -163,11 +163,7 @@ public class TaskService {
 		task.setCompletedAt(LocalDateTime.now());
 		recordExecutorTaskOutcome(task, previousStatus, TaskStatus.DONE);
 		taskRepository.save(task);
-
-		if (task.getExecutor() != null) {
-			task.getExecutor().setState(ExecutorState.IDLE);
-			executorRepository.save(task.getExecutor());
-		}
+		releaseExecutor(task);
 	}
 
 	private TaskResponse toResponse(Task task) {
@@ -185,10 +181,17 @@ public class TaskService {
 	}
 
 	private void releaseExecutor(Task task) {
-		if (task.getExecutor() != null) {
-			task.getExecutor().setState(ExecutorState.IDLE);
-			executorRepository.save(task.getExecutor());
+		if (task.getExecutor() == null) {
+			return;
 		}
+
+		Executor executor = executorRepository.findByIdForUpdate(task.getExecutor().getId()).orElse(null);
+		if (executor == null) {
+			return;
+		}
+
+		executor.setState(ExecutorState.IDLE);
+		executorRepository.save(executor);
 	}
 
 	private void recordExecutorTaskOutcome(Task task, TaskStatus previousStatus, TaskStatus newStatus) {
@@ -199,7 +202,11 @@ public class TaskService {
 			return;
 		}
 
-		Executor executor = task.getExecutor();
+		Executor executor = executorRepository.findByIdForUpdate(task.getExecutor().getId()).orElse(null);
+		if (executor == null) {
+			return;
+		}
+
 		switch (newStatus) {
 			case DONE -> executor.setSuccessfulTasksCount(executor.getSuccessfulTasksCount() + 1);
 			case ERROR -> executor.setErrorTasksCount(executor.getErrorTasksCount() + 1);

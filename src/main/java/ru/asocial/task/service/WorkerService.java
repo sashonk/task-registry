@@ -75,7 +75,7 @@ public class WorkerService {
 
 		executorService.resetAllToIdle();
 
-		for (Executor executor : executors) {
+		for (Executor executor : executorService.findAllExecutors()) {
 			startWorkerThread(executor.getId());
 			log.info("Worker started for executor: {}", executor.getName());
 		}
@@ -89,6 +89,17 @@ public class WorkerService {
 			log.info("Worker registered as executor: {}", worker.name());
 			return worker;
 		}
+	}
+
+	public void stopAndDelete(Long executorId) {
+		executorService.deleteExecutor(executorId);
+		synchronized (WORKER_LOCK) {
+			Thread thread = workerThreads.remove(executorId);
+			if (thread != null) {
+				thread.interrupt();
+			}
+		}
+		log.info("Worker stopped and executor deleted: {}", executorId);
 	}
 
 	@PreDestroy

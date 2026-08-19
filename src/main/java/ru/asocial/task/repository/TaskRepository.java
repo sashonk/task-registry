@@ -27,6 +27,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 	long countByStatusAndCreatedAtAfter(TaskStatus status, LocalDateTime createdAt);
 
+	boolean existsByExecutor_Id(Long executorId);
+
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query("UPDATE Task t SET t.executor = null WHERE t.executor.id = :executorId")
+	int detachExecutor(@Param("executorId") Long executorId);
+
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query("DELETE FROM Task t WHERE t.completedAt < :cutoff AND t.status IN :statuses")
 	int deleteTerminalTasksBefore(@Param("cutoff") LocalDateTime cutoff, @Param("statuses") List<TaskStatus> statuses);
