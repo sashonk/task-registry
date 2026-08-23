@@ -50,4 +50,4 @@ JDBC URL: `jdbc:h2:file:./data/taskdb`
 
 ## Автор
 
-Кисоржевский Александр Дмитриевич — [ВКонтакте](https://vk.com/id13061960), [ФШР](https://ratings.ruchess.ru/people/285513), [FIDE](https://ratings.fide.com/profile/54180465).
+Кисоржевский Александр Дмитриевич — [ВКонтакте](https://vk.com/id13061960).

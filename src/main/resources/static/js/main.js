@@ -6,6 +6,7 @@ import { loadAllLogs, initLogModal } from "./logs.js";
 import { initExecutorsToolbar } from "./executors.js";
 import { initScheduler } from "./scheduler.js";
 import { initTaskModal } from "./task-modal.js";
+import { initMinesweeper } from "./minesweeper.js";
 import { initNavigation, initEscapeHandler, showPage } from "./navigation.js";
 import { ensureAuthenticated, initAuthUi, applyRoleRestrictions } from "./auth.js";
 import { state } from "./state.js";
@@ -25,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       initTaskModal();
       initLogModal();
       initMessageModal();
+      initMinesweeper();
       initPagination(loadTasks, loadAllLogs);
       initEscapeHandler();
       showPage("tasks");

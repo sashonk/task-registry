@@ -22,12 +22,13 @@
   <div class="app-shell">
     <div class="layout">
       <nav class="sidebar metal-panel">
-        <div class="sidebar-title">Main Menu</div>
+        <div class="sidebar-title">Навигация</div>
         <button type="button" class="nav-btn active" data-page="tasks">Задачи</button>
         <button type="button" class="nav-btn" data-page="executors">Исполнители</button>
         <button type="button" class="nav-btn" data-page="logs">Логи</button>
         <button type="button" class="nav-btn" data-page="scheduler">Планировщик</button>
         <button type="button" class="nav-btn" data-page="task-types">Типы задач</button>
+        <button type="button" class="nav-btn" data-page="minesweeper">Сапёр</button>
         <button type="button" class="nav-btn" data-page="help">Справка</button>
       </nav>
 
@@ -167,6 +168,28 @@
             </div>
           </div>
 
+          <div class="page hidden" id="page-minesweeper">
+            <div class="panel metal-panel minesweeper-window">
+              <div class="panel-header">Сапёр</div>
+              <div class="minesweeper-content">
+                <div class="minesweeper-toolbar">
+                  <div class="minesweeper-counter" aria-label="Осталось мин">
+                    <span class="minesweeper-counter-label">Мины</span>
+                    <span class="minesweeper-display" id="minesweeper-mines">015</span>
+                  </div>
+                  <button type="button" class="minesweeper-reset" id="minesweeper-reset" aria-label="Новая игра">🙂</button>
+                  <div class="minesweeper-counter" aria-label="Прошло секунд">
+                    <span class="minesweeper-counter-label">Время</span>
+                    <span class="minesweeper-display" id="minesweeper-time">000</span>
+                  </div>
+                </div>
+                <p class="minesweeper-status" id="minesweeper-status">Откройте первую клетку</p>
+                <div class="minesweeper-board" id="minesweeper-board" role="grid" aria-label="Поле сапёра 10 на 10"></div>
+                <p class="minesweeper-help">Левая кнопка — открыть. Правая — флаг. Обе кнопки на цифре — открыть соседние клетки.</p>
+              </div>
+            </div>
+          </div>
+
           <div class="page hidden" id="page-help">
             <div class="panel metal-panel help-panel">
               <h1 class="help-title">Справка</h1>
@@ -202,22 +225,14 @@
               <section class="author-section">
                 <h2 class="author-heading">Об авторе</h2>
                 <div class="author-card">
-                  <img
-                    class="author-photo"
-                    src="images/author.jpg"
-                    width="120"
-                    height="120"
-                    alt="Кисоржевский Александр Дмитриевич"
-                  >
+                  <div class="author-photo author-avatar" aria-hidden="true">АК</div>
                   <div class="author-info">
                     <h3 class="author-name">Кисоржевский Александр Дмитриевич</h3>
                     <p class="author-role">Автор программы</p>
                     <p class="author-bio">
-                      Разработчик системы учёта задач. Шахматист, Москва.
+                      Разработчик системы учёта задач. Москва.
                       Профиль:
-                      <a href="https://vk.com/id13061960" target="_blank" rel="noopener noreferrer">ВКонтакте</a>,
-                      <a href="https://ratings.ruchess.ru/people/285513" target="_blank" rel="noopener noreferrer">ФШР</a>,
-                      <a href="https://ratings.fide.com/profile/54180465" target="_blank" rel="noopener noreferrer">FIDE</a>.
+                      <a href="https://vk.com/id13061960" target="_blank" rel="noopener noreferrer">ВКонтакте</a>.
                     </p>
                   </div>
                 </div>
