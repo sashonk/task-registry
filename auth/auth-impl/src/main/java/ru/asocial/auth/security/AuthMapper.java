@@ -41,12 +41,18 @@ public final class AuthMapper {
 			if ("ROLE_VIEWER".equals(authority.getAuthority())) {
 				return UserRole.VIEWER;
 			}
+			if ("ROLE_PLAY".equals(authority.getAuthority())) {
+				return UserRole.PLAY;
+			}
 		}
 
 		if (authentication.getPrincipal() instanceof Jwt jwt) {
 			List<?> roles = jwt.getClaim("roles");
 			if (roles != null && roles.contains("ADMIN")) {
 				return UserRole.ADMIN;
+			}
+			if (roles != null && roles.contains("PLAY")) {
+				return UserRole.PLAY;
 			}
 		}
 

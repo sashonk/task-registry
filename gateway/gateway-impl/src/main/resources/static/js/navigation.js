@@ -1,6 +1,6 @@
-import { PAGE_TITLES } from "./constants.js";
+import { PAGE_TITLES, GAME_PAGES } from "./constants.js";
 import { state } from "./state.js";
-import { isAdmin } from "./auth.js";
+import { getDefaultPage, isAdmin, isPlay } from "./auth.js";
 import { showError, closeMessageModal } from "./messages.js";
 import { loadTasks, startTasksAutoRefresh, stopTasksAutoRefresh } from "./tasks.js";
 import { loadAllLogs, startLogsAutoRefresh, stopLogsAutoRefresh } from "./logs.js";
@@ -11,6 +11,11 @@ import { closeModal } from "./task-modal.js";
 import { closeLogModal } from "./logs.js";
 
 export function showPage(page) {
+  const isGamePage = GAME_PAGES.includes(page);
+  if ((isPlay() && !isGamePage) || (!isPlay() && isGamePage)) {
+    page = getDefaultPage();
+  }
+
   state.currentPage = page;
 
   document.querySelectorAll(".page").forEach(section => {

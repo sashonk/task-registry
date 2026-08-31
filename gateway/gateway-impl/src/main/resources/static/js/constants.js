@@ -20,6 +20,8 @@ export const PAGE_TITLES = {
   help: "Task Registry — Справка"
 };
 
+export const GAME_PAGES = ["minesweeper", "star-minesweeper", "color-lines", "klondike", "tanks"];
+
 export const TASKS_REFRESH_MS = 2000;
 export const SCHEDULER_REFRESH_MS = 2000;
 export const LOG_REFRESH_MS = 2000;

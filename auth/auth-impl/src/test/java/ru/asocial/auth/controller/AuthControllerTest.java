@@ -48,6 +48,30 @@ class AuthControllerTest {
 	}
 
 	@Test
+	void playLoginReturnsPlayRole() throws Exception {
+		MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("""
+								{"username":"play","password":"play"}
+								"""))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.accessToken", not(emptyString())))
+				.andExpect(jsonPath("$.user.username").value("play"))
+				.andExpect(jsonPath("$.user.role").value("PLAY"))
+				.andExpect(jsonPath("$.user.admin").value(false))
+				.andReturn();
+
+		String response = loginResult.getResponse().getContentAsString();
+		String token = response.replaceAll("(?s).*\"accessToken\"\\s*:\\s*\"([^\"]+)\".*", "$1");
+
+		mockMvc.perform(get("/api/auth/me")
+						.header("Authorization", "Bearer " + token))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.username").value("play"))
+				.andExpect(jsonPath("$.role").value("PLAY"));
+	}
+
+	@Test
 	void meRequiresBearerToken() throws Exception {
 		mockMvc.perform(get("/api/auth/me"))
 				.andExpect(status().isUnauthorized());

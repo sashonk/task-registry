@@ -1,4 +1,5 @@
 import { apiFetch, setAccessToken } from "./api.js";
+import { GAME_PAGES } from "./constants.js";
 import { state } from "./state.js";
 
 export async function ensureAuthenticated() {
@@ -14,6 +15,14 @@ export async function ensureAuthenticated() {
 
 export function isAdmin() {
   return state.currentUser?.role === "ADMIN";
+}
+
+export function isPlay() {
+  return state.currentUser?.role === "PLAY";
+}
+
+export function getDefaultPage() {
+  return isPlay() ? GAME_PAGES[0] : "tasks";
 }
 
 export function initAuthUi() {
@@ -47,6 +56,11 @@ export async function logout() {
 }
 
 export function applyRoleRestrictions() {
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    const isGamePage = GAME_PAGES.includes(btn.dataset.page);
+    btn.classList.toggle("hidden", isPlay() ? !isGamePage : isGamePage);
+  });
+
   if (isAdmin()) {
     return;
   }

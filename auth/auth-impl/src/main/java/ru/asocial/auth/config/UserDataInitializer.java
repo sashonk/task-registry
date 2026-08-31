@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -25,9 +26,11 @@ public class UserDataInitializer {
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
+	@Order(100)
 	public void seedUsers() {
 		createUserIfMissing("admin", "admin", UserRole.ADMIN);
 		createUserIfMissing("user", "user", UserRole.VIEWER);
+		createUserIfMissing("play", "play", UserRole.PLAY);
 	}
 
 	private void createUserIfMissing(String username, String rawPassword, UserRole role) {

@@ -3,7 +3,8 @@ package ru.asocial.auth.model;
 public enum UserRole {
 
 	ADMIN("Администратор"),
-	VIEWER("Наблюдатель");
+	VIEWER("Наблюдатель"),
+	PLAY("Игра");
 
 	private final String displayName;
 

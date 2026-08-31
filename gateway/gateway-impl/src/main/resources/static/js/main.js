@@ -11,7 +11,7 @@ import { initColorLines } from "./color-lines.js";
 import { initKlondike } from "./klondike.js";
 import { initTanks } from "./tanks.js";
 import { initNavigation, initEscapeHandler, showPage } from "./navigation.js";
-import { ensureAuthenticated, initAuthUi, applyRoleRestrictions } from "./auth.js";
+import { ensureAuthenticated, initAuthUi, applyRoleRestrictions, getDefaultPage, isPlay } from "./auth.js";
 import { state } from "./state.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,24 +19,31 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       initAuthUi();
       applyRoleRestrictions();
+      if (isPlay()) {
+        return null;
+      }
       return loadTaskTypes();
     })
     .then(() => {
       initNavigation();
-      initTasksToolbar();
-      initExecutorsToolbar();
-      initScheduler();
-      initTaskModal();
-      initLogModal();
+      if (!isPlay()) {
+        initTasksToolbar();
+        initExecutorsToolbar();
+        initScheduler();
+        initTaskModal();
+        initLogModal();
+        initPagination(loadTasks, loadAllLogs);
+      }
       initMessageModal();
-      initMinesweeper();
-      initStarMinesweeper();
-      initColorLines();
-      initKlondike();
-      initTanks();
-      initPagination(loadTasks, loadAllLogs);
+      if (isPlay()) {
+        initMinesweeper();
+        initStarMinesweeper();
+        initColorLines();
+        initKlondike();
+        initTanks();
+      }
       initEscapeHandler();
-      showPage("tasks");
+      showPage(getDefaultPage());
     })
     .catch(error => {
       if (state.currentUser) {
