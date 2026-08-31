@@ -1,0 +1,14 @@
+services:
+  kafka:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.2.4
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://kafka:9092,external://localhost:19092
+      - --smp 1
+      - --memory 512M
+      - --overprovisioned
+      - --mode dev-container
+    ports:
+      - "9092:19092"

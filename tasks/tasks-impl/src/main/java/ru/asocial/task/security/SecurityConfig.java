@@ -2,35 +2,42 @@ package ru.asocial.task.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextRepository;
+
+import ru.asocial.auth.jwt.JobflowJwtAutoConfiguration;
 
 @Configuration
 @EnableWebSecurity
 @Profile("!test")
+@Import(JobflowJwtAutoConfiguration.class)
 public class SecurityConfig {
 
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityContextRepository securityContextRepository)
-			throws Exception {
+	SecurityFilterChain securityFilterChain(
+			HttpSecurity http,
+			JwtDecoder jwtDecoder,
+			JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-				.securityContext(context -> context.securityContextRepository(securityContextRepository))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/auth/login").permitAll()
 						.requestMatchers("/h2-console/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "VIEWER")
-						.requestMatchers(HttpMethod.POST, "/api/auth/logout").hasAnyRole("ADMIN", "VIEWER")
 						.requestMatchers("/api/**").hasRole("ADMIN")
 						.anyRequest().denyAll())
-				.formLogin(form -> form.disable())
-				.httpBasic(basic -> basic.disable())
-				.logout(logout -> logout.disable())
+				.oauth2ResourceServer(oauth2 -> oauth2
+						.jwt(jwt -> jwt
+								.decoder(jwtDecoder)
+								.jwtAuthenticationConverter(jwtAuthenticationConverter)))
 				.exceptionHandling(ex -> ex
 						.authenticationEntryPoint((request, response, authException) -> {
 							response.sendError(HttpStatus.UNAUTHORIZED.value());

@@ -4,19 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>ru.asocial</groupId>
-		<artifactId>scheduler</artifactId>
+		<artifactId>auth</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>scheduler-impl</artifactId>
+	<artifactId>auth-impl</artifactId>
 	<dependencies>
-		<dependency>
-			<groupId>ru.asocial</groupId>
-			<artifactId>scheduler-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ru.asocial</groupId>
-			<artifactId>tasks-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>ru.asocial</groupId>
 			<artifactId>auth-api</artifactId>
@@ -34,16 +26,8 @@
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>tools.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-kafka</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>

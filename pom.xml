@@ -19,6 +19,7 @@
 		<module>tasks</module>
 		<module>scheduler</module>
 		<module>gateway</module>
+		<module>auth</module>
 	</modules>
 
 	<properties>
@@ -43,6 +44,11 @@
 			<dependency>
 				<groupId>ru.asocial</groupId>
 				<artifactId>scheduler-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ru.asocial</groupId>
+				<artifactId>auth-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

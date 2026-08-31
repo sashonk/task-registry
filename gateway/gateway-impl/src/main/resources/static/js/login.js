@@ -1,3 +1,5 @@
+import { setAccessToken } from "./api.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("login-form");
   const errorEl = document.getElementById("login-error");
@@ -19,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
-        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
@@ -31,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      const body = await response.json();
+      setAccessToken(body.accessToken);
       window.location.href = "/";
     } catch {
       errorEl.textContent = "Не удалось выполнить вход. Проверьте соединение.";

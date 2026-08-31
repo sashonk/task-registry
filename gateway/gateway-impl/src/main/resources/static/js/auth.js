@@ -1,4 +1,4 @@
-import { apiFetch } from "./api.js";
+import { apiFetch, setAccessToken } from "./api.js";
 import { state } from "./state.js";
 
 export async function ensureAuthenticated() {
@@ -36,11 +36,13 @@ export function initAuthUi() {
 }
 
 export async function logout() {
-  const response = await apiFetch("/api/auth/logout", { method: "POST" });
-  if (!response.ok && response.status !== 204) {
-    throw new Error("Не удалось выйти");
+  try {
+    await apiFetch("/api/auth/logout", { method: "POST" });
+  } catch {
+    // redirect anyway after clearing local token
   }
 
+  setAccessToken(null);
   window.location.href = "/login.html";
 }
 
