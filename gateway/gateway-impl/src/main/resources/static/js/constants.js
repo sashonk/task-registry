@@ -13,6 +13,10 @@ export const PAGE_TITLES = {
   scheduler: "Task Registry — Планировщик",
   "task-types": "Task Registry — Типы задач",
   minesweeper: "Task Registry — Сапёр",
+  "star-minesweeper": "Task Registry — Сапёр — Звезда",
+  "color-lines": "Task Registry — Цветные линии",
+  klondike: "Task Registry — Косынка",
+  tanks: "Task Registry — Танчики",
   help: "Task Registry — Справка"
 };
 

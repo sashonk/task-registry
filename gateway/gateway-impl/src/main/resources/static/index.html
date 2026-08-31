@@ -29,6 +29,10 @@
         <button type="button" class="nav-btn" data-page="scheduler">Планировщик</button>
         <button type="button" class="nav-btn" data-page="task-types">Типы задач</button>
         <button type="button" class="nav-btn" data-page="minesweeper">Сапёр</button>
+        <button type="button" class="nav-btn" data-page="star-minesweeper">Сапёр — Звезда</button>
+        <button type="button" class="nav-btn" data-page="color-lines">Цветные линии</button>
+        <button type="button" class="nav-btn" data-page="klondike">Косынка</button>
+        <button type="button" class="nav-btn" data-page="tanks">Танчики</button>
         <button type="button" class="nav-btn" data-page="help">Справка</button>
       </nav>
 
@@ -186,6 +190,99 @@
                 <p class="minesweeper-status" id="minesweeper-status">Откройте первую клетку</p>
                 <div class="minesweeper-board" id="minesweeper-board" role="grid" aria-label="Поле сапёра 10 на 10"></div>
                 <p class="minesweeper-help">Левая кнопка — открыть. Правая — флаг. Обе кнопки на цифре — открыть соседние клетки.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-star-minesweeper">
+            <div class="panel metal-panel minesweeper-window star-minesweeper-window">
+              <div class="panel-header">Сапёр — Звезда</div>
+              <div class="minesweeper-content star-minesweeper-content">
+                <div class="minesweeper-toolbar star-minesweeper-toolbar">
+                  <div class="minesweeper-counter" aria-label="Осталось мин">
+                    <span class="minesweeper-counter-label">Мины</span>
+                    <span class="minesweeper-display" id="star-minesweeper-mines">020</span>
+                  </div>
+                  <button type="button" class="minesweeper-reset" id="star-minesweeper-reset" aria-label="Новая игра">🙂</button>
+                  <div class="minesweeper-counter" aria-label="Прошло секунд">
+                    <span class="minesweeper-counter-label">Время</span>
+                    <span class="minesweeper-display" id="star-minesweeper-time">000</span>
+                  </div>
+                </div>
+                <p class="minesweeper-status star-minesweeper-status" id="star-minesweeper-status">Откройте первую клетку</p>
+                <div class="minesweeper-board star-minesweeper-board" id="star-minesweeper-board" role="grid" aria-label="Поле сапёра в форме шестиконечной звезды"></div>
+                <p class="minesweeper-help star-minesweeper-help">Активны только клетки звезды. Левая кнопка — открыть, правая — флаг.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-color-lines">
+            <div class="panel metal-panel color-lines-window">
+              <div class="panel-header">Цветные линии</div>
+              <div class="color-lines-content">
+                <div class="color-lines-toolbar">
+                  <div class="color-lines-score" aria-label="Счёт">
+                    <span class="color-lines-label">Счёт</span>
+                    <span class="color-lines-display" id="color-lines-score">000</span>
+                  </div>
+                  <button type="button" class="color-lines-reset" id="color-lines-reset">Новая игра</button>
+                  <div class="color-lines-next" aria-label="Следующие шары">
+                    <span class="color-lines-label">Следующие</span>
+                    <div class="color-lines-next-balls" id="color-lines-next"></div>
+                  </div>
+                </div>
+                <p class="color-lines-status" id="color-lines-status">Выберите шар</p>
+                <div class="color-lines-board" id="color-lines-board" role="grid" aria-label="Поле Цветных линий 9 на 9"></div>
+                <p class="color-lines-help">Соберите линию из пяти шаров. Шар перемещается только по свободному пути.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-klondike">
+            <div class="panel metal-panel klondike-window">
+              <div class="panel-header">Косынка</div>
+              <div class="klondike-content">
+                <div class="klondike-toolbar">
+                  <div class="klondike-counter" aria-label="Количество ходов">
+                    <span class="klondike-counter-label">Ходы</span>
+                    <span class="klondike-display" id="klondike-moves">000</span>
+                  </div>
+                  <button type="button" class="klondike-reset" id="klondike-reset">Новая игра</button>
+                  <div class="klondike-counter" aria-label="Прошло секунд">
+                    <span class="klondike-counter-label">Время</span>
+                    <span class="klondike-display" id="klondike-time">000</span>
+                  </div>
+                </div>
+                <p class="klondike-status" id="klondike-status">Выберите карту или возьмите из колоды</p>
+                <div class="klondike-board" id="klondike-board" aria-label="Поле пасьянса Косынка">
+                  <div class="klondike-top-row">
+                    <div class="klondike-foundations" id="klondike-foundations"></div>
+                    <div class="klondike-stock-area">
+                      <div class="klondike-stock" id="klondike-stock"></div>
+                      <div class="klondike-waste" id="klondike-waste"></div>
+                    </div>
+                  </div>
+                  <div class="klondike-tableau" id="klondike-tableau"></div>
+                </div>
+                <p class="klondike-help">Клик — выбрать и положить. Двойной клик — в дом. Колода — по 3 карты.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page hidden" id="page-tanks">
+            <div class="panel metal-panel tanks-window">
+              <div class="panel-header">Танчики</div>
+              <div class="tanks-content">
+                <div class="tanks-toolbar">
+                  <div class="tanks-counter" aria-label="Счёт">
+                    <span class="tanks-counter-label">Счёт</span>
+                    <span class="tanks-display" id="tanks-score">000</span>
+                  </div>
+                  <button type="button" class="tanks-reset" id="tanks-reset">Новая игра</button>
+                </div>
+                <p class="tanks-status" id="tanks-status">Уничтожьте всех врагов</p>
+                <canvas id="tanks-canvas" class="tanks-canvas" width="260" height="260" aria-label="Поле танчиков"></canvas>
+                <p class="tanks-help">WASD или стрелки — движение. Пробел — огонь.</p>
               </div>
             </div>
           </div>
