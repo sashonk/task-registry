@@ -53,7 +53,7 @@ class ScheduleSecurityTest {
 						.header("Authorization", "Bearer " + token)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
-								{"taskType":"DELAY","parameters":"5","nextRunAt":"2026-01-01T00:00:00","repeatIntervalMinutes":60}
+								{"taskType":"DELAY","parameters":"5","nextRunAt":"2026-01-01T00:00:00Z","repeatIntervalMinutes":60}
 								"""))
 				.andExpect(status().isForbidden());
 	}

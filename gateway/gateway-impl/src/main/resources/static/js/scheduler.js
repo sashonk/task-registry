@@ -1,7 +1,7 @@
 import { SCHEDULER_REFRESH_MS, TYPES_WITHOUT_PARAMETERS, TYPES_WITH_OPTIONAL_PARAMETERS } from "./constants.js";
 import { apiFetch } from "./api.js";
 import { state } from "./state.js";
-import { formatDateTime, defaultScheduleDateTime } from "./utils.js";
+import { formatDateTime, defaultScheduleDateTime, toUtcIsoFromDateTimeLocal } from "./utils.js";
 import { validateBatchBuilder } from "./batch-builder.js";
 import { readParametersPayload, updateScheduleParametersFieldVisibility } from "./parameters.js";
 import { showError, showConfirm, showMessage } from "./messages.js";
@@ -116,6 +116,12 @@ async function createSchedule(event) {
     return;
   }
 
+  const nextRunAtUtc = toUtcIsoFromDateTimeLocal(nextRunAt);
+  if (!nextRunAtUtc) {
+    await showMessage("Некорректная дата и время запуска.", "Внимание");
+    return;
+  }
+
   if (!TYPES_WITHOUT_PARAMETERS.has(type) && !TYPES_WITH_OPTIONAL_PARAMETERS.has(type) && !parameters) {
     await showMessage("Укажите параметры расписания.", "Внимание");
     return;
@@ -123,7 +129,7 @@ async function createSchedule(event) {
 
   const payload = {
     taskType: type,
-    nextRunAt
+    nextRunAt: nextRunAtUtc
   };
 
   if (parameters) {

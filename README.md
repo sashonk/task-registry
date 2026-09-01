@@ -16,9 +16,9 @@
 
 ## Требования
 
-- JDK 17+
-- Maven 3.9+
-- Kafka на `localhost:9092` (локальная установка или Docker — см. ниже)
+- JDK 17+ и Maven 3.9+ — для локальной разработки
+- Docker Desktop — для запуска всего стека одной командой (см. ниже)
+- Kafka на `localhost:9092` — только при локальном запуске без Docker
 
 ## Сборка
 
@@ -28,7 +28,38 @@ mvn package
 
 ## Запуск
 
-### 1. Kafka
+### Вариант A — весь стек в Docker (рекомендуется)
+
+```bash
+docker compose up --build -d
+```
+
+Поднимает Kafka (Redpanda), auth, tasks, scheduler и gateway. UI: http://localhost:8080
+
+Остановка:
+
+```bash
+docker compose down
+```
+
+Данные H2 сохраняются в named volumes (`auth-data`, `tasks-data`, `scheduler-data`). Полная очистка: `docker compose down -v`.
+
+Первый запуск собирает 4 Java-образа через Maven внутри Docker — может занять несколько минут.
+
+JWT secret (опционально, для prod-like окружения):
+
+```bash
+# PowerShell
+$env:APP_JWT_SECRET="your-256-bit-or-longer-secret-key-here!!"
+docker compose up --build -d
+
+# bash
+APP_JWT_SECRET="your-256-bit-or-longer-secret-key-here!!" docker compose up --build -d
+```
+
+### Вариант B — локальная разработка (Maven)
+
+#### 1. Kafka
 
 **Если Kafka уже установлен локально** — ничего дополнительно не нужно. Сервисы подключаются к:
 
@@ -38,15 +69,15 @@ spring.kafka.bootstrap-servers=localhost:9092
 
 Убедитесь, что брокер запущен. Топик `task.create` создастся автоматически, если у брокера включён `auto.create.topics.enable` (по умолчанию — да).
 
-**Альтернатива — Docker** (если локальной Kafka нет):
+**Только Kafka в Docker** (backend запускаете через Maven):
 
 ```bash
-docker compose up -d
+docker compose up -d kafka
 ```
 
 Образ: `docker.redpanda.com/redpandadata/redpanda` (не Docker Hub). Подробнее — [Docker в РФ](#docker-в-рф).
 
-### 2. JWT secret (рекомендуется)
+#### 2. JWT secret (рекомендуется)
 
 Один и тот же секрет нужен **auth-impl**, **tasks-impl** и **scheduler-impl**:
 
@@ -60,7 +91,7 @@ export APP_JWT_SECRET="your-256-bit-or-longer-secret-key-here!!"
 
 Если переменная не задана, используется dev-значение из `application.properties` (только для локальной разработки).
 
-### 3. Backend-сервисы (4 терминала)
+#### 3. Backend-сервисы (4 терминала)
 
 Запускайте из корня репозитория (чтобы `./data/*` были в одном месте):
 
@@ -71,7 +102,7 @@ mvn -pl scheduler/scheduler-impl spring-boot:run
 mvn -pl gateway/gateway-impl spring-boot:run
 ```
 
-### 4. Открыть UI
+#### 4. Открыть UI
 
 - Приложение: http://localhost:8080
 - H2 Console tasks (только `ADMIN` + JWT): http://localhost:8081/h2-console  
@@ -83,6 +114,7 @@ mvn -pl gateway/gateway-impl spring-boot:run
 |-------|--------|--------|
 | admin | admin  | ADMIN  |
 | user  | user   | VIEWER |
+| play  | play   | PLAY   |
 
 Смените пароли, если приложение доступно не только локально.
 
@@ -130,19 +162,17 @@ jobflow/
 Docker Hub с 2024 года ограничивает доступ с российских IP (403 Forbidden). Для JobFlow это не критично:
 
 1. **Redpanda** — образ уже указан как `docker.redpanda.com/redpandadata/redpanda` (собственный registry вендора).
-2. **Зеркала Docker Hub** — если понадобятся другие образы, добавьте в Docker Desktop → Settings → Docker Engine:
+2. **Зеркало Docker Hub** — для базовых образов (`eclipse-temurin`, `maven`) добавьте в Docker Desktop → Settings → Docker Engine **одно** рабочее зеркало:
 
 ```json
 {
   "registry-mirrors": [
-    "https://dockerhub1.beget.com",
-    "https://dockerhub.timeweb.cloud",
-    "https://cr.yandex/mirror"
+    "https://dockerhub.timeweb.cloud"
   ]
 }
 ```
 
-Нажмите **Apply & restart**. Актуальный список зеркал лучше сверять с документацией провайдера (Beget, Timeweb, Yandex Cloud).
+Альтернатива: `https://dh-mirror.gitverse.ru`. Не добавляйте несколько зеркал сразу — нерабочие могут зависать при pull. Нажмите **Apply & restart**.
 
 3. **Без Docker** — можно поднять Kafka локально (см. [Apache Kafka quickstart](https://kafka.apache.org/quickstart)) и указать `spring.kafka.bootstrap-servers=localhost:9092` в сервисах.
 

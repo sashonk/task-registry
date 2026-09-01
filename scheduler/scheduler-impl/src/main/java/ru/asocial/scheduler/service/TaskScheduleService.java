@@ -1,6 +1,6 @@
 package ru.asocial.scheduler.service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class TaskScheduleService {
 		schedule.setNextRunAt(request.nextRunAt());
 		schedule.setRepeatIntervalMinutes(normalizeRepeatInterval(request.repeatIntervalMinutes()));
 		schedule.setEnabled(true);
-		schedule.setCreatedAt(LocalDateTime.now());
+		schedule.setCreatedAt(Instant.now());
 
 		return toResponse(taskScheduleRepository.save(schedule));
 	}
@@ -79,7 +79,7 @@ public class TaskScheduleService {
 
 	@Transactional
 	public void processDueSchedules() {
-		LocalDateTime now = LocalDateTime.now();
+		Instant now = Instant.now();
 		List<TaskSchedule> dueSchedules = taskScheduleRepository
 				.findByEnabledTrueAndNextRunAtLessThanEqualOrderByNextRunAtAsc(now);
 
@@ -94,7 +94,7 @@ public class TaskScheduleService {
 				.orElseThrow(() -> new ResourceNotFoundException("Schedule not found: " + id));
 	}
 
-	private void triggerSchedule(TaskSchedule schedule, LocalDateTime now) {
+	private void triggerSchedule(TaskSchedule schedule, Instant now) {
 		TaskCreateCommand command = new TaskCreateCommand(schedule.getTaskType(), schedule.getFormula());
 		kafkaTemplate.send(taskCreateTopic, String.valueOf(schedule.getId()), command);
 		log.info("Published task create command for schedule id={}, type={}", schedule.getId(), schedule.getTaskType());
@@ -103,7 +103,7 @@ public class TaskScheduleService {
 
 		Long repeatIntervalMinutes = schedule.getRepeatIntervalMinutes();
 		if (repeatIntervalMinutes != null && repeatIntervalMinutes > 0) {
-			schedule.setNextRunAt(now.plusMinutes(repeatIntervalMinutes));
+			schedule.setNextRunAt(now.plusSeconds(repeatIntervalMinutes * 60));
 		}
 		else {
 			schedule.setEnabled(false);

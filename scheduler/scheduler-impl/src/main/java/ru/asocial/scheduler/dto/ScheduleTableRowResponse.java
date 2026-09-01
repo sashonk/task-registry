@@ -1,17 +1,17 @@
 package ru.asocial.scheduler.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import ru.asocial.scheduler.service.TaskDisplayNames;
 
 public record ScheduleTableRowResponse(
 		Long id,
 		String taskName,
-		LocalDateTime nextRunAt,
+		Instant nextRunAt,
 		String repeatText,
 		boolean enabled,
 		String statusText,
-		LocalDateTime lastTriggeredAt) {
+		Instant lastTriggeredAt) {
 
 	public static ScheduleTableRowResponse from(ScheduleResponse schedule) {
 		return new ScheduleTableRowResponse(

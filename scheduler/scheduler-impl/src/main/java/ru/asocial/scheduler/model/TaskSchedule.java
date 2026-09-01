@@ -1,6 +1,6 @@
 package ru.asocial.scheduler.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class TaskSchedule {
 	private String formula;
 
 	@Column(nullable = false)
-	private LocalDateTime nextRunAt;
+	private Instant nextRunAt;
 
 	@Column
 	private Long repeatIntervalMinutes;
@@ -41,10 +41,10 @@ public class TaskSchedule {
 	@Column(nullable = false)
 	private boolean enabled = true;
 
-	private LocalDateTime lastTriggeredAt;
+	private Instant lastTriggeredAt;
 
 	@Column(nullable = false)
-	private LocalDateTime createdAt;
+	private Instant createdAt;
 
 	public Long getId() {
 		return id;
@@ -70,11 +70,11 @@ public class TaskSchedule {
 		this.formula = formula;
 	}
 
-	public LocalDateTime getNextRunAt() {
+	public Instant getNextRunAt() {
 		return nextRunAt;
 	}
 
-	public void setNextRunAt(LocalDateTime nextRunAt) {
+	public void setNextRunAt(Instant nextRunAt) {
 		this.nextRunAt = nextRunAt;
 	}
 
@@ -94,19 +94,19 @@ public class TaskSchedule {
 		this.enabled = enabled;
 	}
 
-	public LocalDateTime getLastTriggeredAt() {
+	public Instant getLastTriggeredAt() {
 		return lastTriggeredAt;
 	}
 
-	public void setLastTriggeredAt(LocalDateTime lastTriggeredAt) {
+	public void setLastTriggeredAt(Instant lastTriggeredAt) {
 		this.lastTriggeredAt = lastTriggeredAt;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
 }

@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ class TaskScheduleServiceTest {
 		schedule.setEnabled(true);
 		schedule.setRepeatIntervalMinutes(null);
 
-		LocalDateTime now = LocalDateTime.now();
+		Instant now = Instant.parse("2026-01-01T00:00:00Z");
 		when(taskScheduleRepository.save(schedule)).thenReturn(schedule);
 
 		ReflectionTestUtils.invokeMethod(taskScheduleService, "triggerSchedule", schedule, now);
