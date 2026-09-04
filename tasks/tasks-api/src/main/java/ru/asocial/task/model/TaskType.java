@@ -13,5 +13,6 @@ public enum TaskType {
 	CLEANUP,
 	BATCH,
 	SIMULATION,
-	SCRIPT
+	SCRIPT,
+	RSS_READ
 }

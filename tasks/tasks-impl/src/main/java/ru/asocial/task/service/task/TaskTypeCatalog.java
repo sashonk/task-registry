@@ -110,6 +110,13 @@ public class TaskTypeCatalog {
 					"JSON: script — текст скрипта.",
 					"{\"script\": \"log(\\\"Hello\\\"); 2 + 2\"}",
 					true);
+			case RSS_READ -> new TaskTypeInfoResponse(
+					type.name(),
+					"Чтение RSS",
+					"Скачивает RSS или Atom ленту и записывает заголовки, ссылки и даты записей в лог.",
+					"JSON: url — адрес ленты; maxItems и timeoutSeconds — необязательно.",
+					"{\"url\": \"https://example.com/feed.xml\", \"maxItems\": 10}",
+					true);
 		};
 	}
 }

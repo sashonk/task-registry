@@ -123,6 +123,10 @@ public class TaskExecutionService {
 					runScript(taskId, task.getFormula());
 					taskService.completeTask(taskId);
 				}
+				case RSS_READ -> {
+					runRssRead(taskId, task.getFormula());
+					taskService.completeTask(taskId);
+				}
 			}
 		}
 		catch (InterruptedException exception) {
@@ -353,6 +357,14 @@ public class TaskExecutionService {
 					throw new IllegalStateException(exception);
 				}
 			}
+			case RSS_READ -> {
+				try {
+					runRssRead(taskId, parameters);
+				}
+				catch (Exception exception) {
+					throw new IllegalStateException(exception);
+				}
+			}
 			default -> throw new IllegalStateException("Unsupported batch step: " + type);
 		}
 	}
@@ -377,6 +389,35 @@ public class TaskExecutionService {
 			long percent = Math.min(100L, elapsedMs * 100 / totalMs);
 			taskService.updateProgress(taskId, percent);
 			taskLogService.addLog(taskId, "Симуляция: " + percent + "%, интенсивность " + intensity);
+		}
+	}
+
+	private void runRssRead(Long taskId, String parameters) throws IOException, InterruptedException {
+		JsonNode node = TaskParametersMapper.readTree(parameters);
+		String url = node.get("url").asText();
+		int maxItems = node.has("maxItems") ? node.get("maxItems").asInt() : 10;
+		int timeoutSeconds = node.has("timeoutSeconds") ? node.get("timeoutSeconds").asInt() : 10;
+
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(url))
+				.timeout(Duration.ofSeconds(timeoutSeconds))
+				.GET()
+				.build();
+		HttpClient client = HttpClient.newBuilder()
+				.connectTimeout(Duration.ofSeconds(timeoutSeconds))
+				.followRedirects(HttpClient.Redirect.NORMAL)
+				.build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() < 200 || response.statusCode() >= 300) {
+			throw new IllegalStateException("HTTP " + response.statusCode() + " for " + url);
+		}
+
+		RssFeedParser.Feed feed = RssFeedParser.parse(response.body(), maxItems);
+		taskLogService.addLog(taskId, "GET " + url);
+		taskLogService.addLog(taskId, "Лента: " + (feed.title() == null || feed.title().isBlank() ? "-" : feed.title()));
+		taskLogService.addLog(taskId, "Записей: " + feed.items().size());
+		for (RssFeedParser.Item item : feed.items()) {
+			taskLogService.addLog(taskId, item.format());
 		}
 	}
 

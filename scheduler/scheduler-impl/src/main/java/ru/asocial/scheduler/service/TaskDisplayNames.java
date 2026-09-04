@@ -22,6 +22,7 @@ public final class TaskDisplayNames {
 			case BATCH -> "Пакет";
 			case SIMULATION -> "Симуляция";
 			case SCRIPT -> "Groovy-скрипт";
+			case RSS_READ -> "Чтение RSS";
 		};
 	}
 }

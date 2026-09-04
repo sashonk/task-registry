@@ -40,7 +40,8 @@ export const TASK_TYPE_HINTS = {
   CLEANUP: '{"target": "logs", "daysOld": 30}',
   BATCH: '{"steps": [{"type": "RANDOM", "parameters": {"min": 1, "max": 10}}, {"type": "CALCULATION", "parameters": "2+2"}]}',
   SIMULATION: '{"durationSeconds": 15, "intensity": 50}',
-  SCRIPT: '{"script": "log(\\"Hello from Groovy\\"); 2 + 2"}'
+  SCRIPT: '{"script": "log(\\"Hello from Groovy\\"); 2 + 2"}',
+  RSS_READ: '{"url": "https://example.com/feed.xml", "maxItems": 10}'
 };
 
 export const TYPES_WITHOUT_PARAMETERS = new Set();
@@ -148,5 +149,10 @@ export const BATCH_STEP_FIELDS = {
   ],
   SCRIPT: [
     { key: "script", label: "Groovy-скрипт", type: "textarea", wide: true, required: true, rows: 4, defaultValue: 'log("step"); 1 + 1' }
+  ],
+  RSS_READ: [
+    { key: "url", label: "URL ленты", type: "text", wide: true, required: true, placeholder: "https://example.com/feed.xml" },
+    { key: "maxItems", label: "Макс. записей", type: "number", min: 1, max: 50, defaultValue: "10" },
+    { key: "timeoutSeconds", label: "Таймаут (сек.)", type: "number", min: 1, defaultValue: "10" }
   ]
 };

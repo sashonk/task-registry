@@ -29,6 +29,7 @@ public final class TaskParameterValidator {
 				JsonNode node = parseJson(parameters);
 				requireField(node, "script");
 			}
+			case RSS_READ -> validateRssRead(parseJson(parameters));
 		}
 	}
 
@@ -132,6 +133,22 @@ public final class TaskParameterValidator {
 			return parameters.asText();
 		}
 		return parameters.toString();
+	}
+
+	private static void validateRssRead(JsonNode node) {
+		requireField(node, "url");
+		if (node.has("maxItems")) {
+			int maxItems = node.get("maxItems").asInt();
+			if (maxItems <= 0 || maxItems > 50) {
+				throw new BadRequestException("RSS_READ maxItems must be between 1 and 50");
+			}
+		}
+		if (node.has("timeoutSeconds")) {
+			int timeoutSeconds = node.get("timeoutSeconds").asInt();
+			if (timeoutSeconds <= 0) {
+				throw new BadRequestException("timeoutSeconds must be greater than zero");
+			}
+		}
 	}
 
 	private static void validateSimulation(JsonNode node) {
