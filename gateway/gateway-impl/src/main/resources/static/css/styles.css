@@ -989,6 +989,48 @@ tr.selected:hover {
   width: 680px;
 }
 
+.audit-modal-window {
+  width: 560px;
+}
+
+.audit-details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.audit-details-table th {
+  width: 140px;
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 12px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.audit-details-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.audit-details-table tr:last-child th,
+.audit-details-table tr:last-child td {
+  border-bottom: none;
+}
+
+.audit-payload {
+  margin: 0;
+  padding: 0;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 260px;
+  overflow: auto;
+}
+
 .log-modal-body {
   max-height: 440px;
   padding: 0;
@@ -1019,6 +1061,46 @@ tr.selected:hover {
   font-family: Consolas, "Courier New", monospace;
   font-size: 12px;
   white-space: nowrap;
+}
+
+.audit-table th:first-child,
+.audit-table td:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+.audit-table th:nth-child(2),
+.audit-table td:nth-child(2) {
+  width: 170px;
+  color: var(--text-secondary);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.audit-table th:nth-child(3),
+.audit-table td:nth-child(3) {
+  width: 180px;
+}
+
+.audit-table th:nth-child(4),
+.audit-table td:nth-child(4) {
+  width: 120px;
+}
+
+.audit-table th:nth-child(5),
+.audit-table td:nth-child(5) {
+  width: 130px;
+  color: var(--text-secondary);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.audit-table th:nth-child(6),
+.audit-table td:nth-child(6) {
+  width: 80px;
+  text-align: center;
 }
 
 .log-message-cell,

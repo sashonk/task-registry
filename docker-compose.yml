@@ -75,6 +75,21 @@ services:
       kafka:
         condition: service_healthy
 
+  audit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODULE: audit/audit-impl
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-change-me-to-a-secret-key-at-least-32-chars-long!!}
+    volumes:
+      - audit-data:/app/data
+    depends_on:
+      kafka:
+        condition: service_healthy
+
   gateway:
     build:
       context: .
@@ -89,8 +104,10 @@ services:
       - auth
       - tasks
       - scheduler
+      - audit
 
 volumes:
   auth-data:
   tasks-data:
   scheduler-data:
+  audit-data:

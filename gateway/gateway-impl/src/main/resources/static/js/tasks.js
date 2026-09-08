@@ -3,7 +3,7 @@ import { TASKS_REFRESH_MS } from "./constants.js";
 import { state } from "./state.js";
 import { mapTaskFromApi } from "./utils.js";
 import { applyPaginationResult, fetchPaginated, updatePaginationControls } from "./pagination.js";
-import { showError, showConfirm, showMessage } from "./messages.js";
+import { showError, showMessage } from "./messages.js";
 import { openLogModal } from "./logs.js";
 
 export function selectTask(taskId) {
@@ -119,30 +119,8 @@ export async function abortSelectedTask() {
   await loadTasks();
 }
 
-export async function deleteSelectedTask() {
-  if (!state.selectedTaskId) {
-    await showMessage("Выберите задачу в таблице.", "Внимание");
-    return;
-  }
-
-  const task = state.tasks.find(item => item.id === state.selectedTaskId);
-  if (!task) {
-    return;
-  }
-
-  const confirmed = await showConfirm(`Удалить задачу «${task.name}»?`, "Удаление задачи");
-  if (!confirmed) {
-    return;
-  }
-
-  await showMessage("Удаление задач через API пока не реализовано.", "Информация");
-}
-
 export function initTasksToolbar() {
   document.getElementById("btn-abort-task").addEventListener("click", () => {
     abortSelectedTask().catch(showError);
-  });
-  document.getElementById("btn-delete-task").addEventListener("click", () => {
-    deleteSelectedTask().catch(showError);
   });
 }

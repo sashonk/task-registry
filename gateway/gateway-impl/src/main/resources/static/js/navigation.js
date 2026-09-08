@@ -7,6 +7,7 @@ import { loadAllLogs, startLogsAutoRefresh, stopLogsAutoRefresh } from "./logs.j
 import { loadExecutors } from "./executors.js";
 import { loadSchedules, startSchedulerAutoRefresh, stopSchedulerAutoRefresh, closeScheduleModal } from "./scheduler.js";
 import { loadTaskTypes } from "./task-types.js";
+import { loadAuditEvents, closeAuditEventModal } from "./audit.js";
 import { closeModal } from "./task-modal.js";
 import { closeLogModal } from "./logs.js";
 
@@ -49,6 +50,8 @@ export function showPage(page) {
     startSchedulerAutoRefresh();
   } else if (page === "task-types") {
     loadTaskTypes().catch(showError);
+  } else if (page === "audit") {
+    loadAuditEvents().catch(showError);
   }
 }
 
@@ -76,6 +79,11 @@ export function initEscapeHandler() {
 
     if (!document.getElementById("log-modal-overlay").classList.contains("hidden")) {
       closeLogModal();
+      return;
+    }
+
+    if (!document.getElementById("audit-modal-overlay").classList.contains("hidden")) {
+      closeAuditEventModal();
       return;
     }
 

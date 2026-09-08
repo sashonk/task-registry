@@ -12,6 +12,7 @@ export const PAGE_TITLES = {
   logs: "Task Registry — Логи",
   scheduler: "Task Registry — Планировщик",
   "task-types": "Task Registry — Типы задач",
+  audit: "Task Registry — Аудит",
   minesweeper: "Task Registry — Сапёр",
   "star-minesweeper": "Task Registry — Сапёр — Звезда",
   "color-lines": "Task Registry — Цветные линии",

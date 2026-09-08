@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +31,18 @@ import ru.asocial.task.repository.TaskRepository;
 @Service
 public class TaskService {
 
+	private static final Logger log = LoggerFactory.getLogger(TaskService.class);
+
 	private final TaskRepository taskRepository;
 	private final ExecutorRepository executorRepository;
+	private final AuditEventProducer auditProducer;
 
-	public TaskService(TaskRepository taskRepository, ExecutorRepository executorRepository) {
+	public TaskService(TaskRepository taskRepository,
+			ExecutorRepository executorRepository,
+			AuditEventProducer auditProducer) {
 		this.taskRepository = taskRepository;
 		this.executorRepository = executorRepository;
+		this.auditProducer = auditProducer;
 	}
 
 	@Transactional
@@ -54,7 +62,15 @@ public class TaskService {
 		task.setCreatedAt(LocalDateTime.now());
 		task.setFormula(normalizeParameters(request));
 
-		return toResponse(taskRepository.save(task));
+		Task savedTask = taskRepository.save(task);
+
+		try {
+			auditProducer.sendTaskCreatedEvent(savedTask.getId(), savedTask.getType().name(), savedTask.getFormula());
+		} catch (Exception e) {
+			log.warn("Failed to send audit event for task creation: {}", savedTask.getId(), e);
+		}
+
+		return toResponse(savedTask);
 	}
 
 	private String normalizeParameters(TaskCreateCommand request) {
@@ -113,7 +129,15 @@ public class TaskService {
 			task.setExecutor(null);
 		}
 
-		return toResponse(taskRepository.save(task));
+		Task savedTask = taskRepository.save(task);
+
+		try {
+			auditProducer.sendTaskStatusChangedEvent(id, previousStatus.name(), status.name());
+		} catch (Exception e) {
+			log.warn("Failed to send audit event for task status change: {}", id, e);
+		}
+
+		return toResponse(savedTask);
 	}
 
 	@Transactional

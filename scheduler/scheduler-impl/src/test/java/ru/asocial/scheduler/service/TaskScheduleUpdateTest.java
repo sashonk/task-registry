@@ -7,7 +7,9 @@ import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
+import ru.asocial.scheduler.TestKafkaConfig;
 import ru.asocial.scheduler.dto.ScheduleCreateRequest;
 import ru.asocial.scheduler.dto.ScheduleResponse;
 import ru.asocial.task.model.TaskType;
@@ -19,6 +21,7 @@ import ru.asocial.task.model.TaskType;
 		"app.jwt.issuer=jobflow-auth",
 		"app.jwt.access-token-ttl=PT1H"
 })
+@Import(TestKafkaConfig.class)
 class TaskScheduleUpdateTest {
 
 	@Autowired

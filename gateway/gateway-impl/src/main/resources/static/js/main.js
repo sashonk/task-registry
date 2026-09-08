@@ -3,6 +3,7 @@ import { initPagination } from "./pagination.js";
 import { loadTaskTypes } from "./task-types.js";
 import { loadTasks, initTasksToolbar } from "./tasks.js";
 import { loadAllLogs, initLogModal } from "./logs.js";
+import { initAuditFilters } from "./audit.js";
 import { initExecutorsToolbar } from "./executors.js";
 import { initScheduler } from "./scheduler.js";
 import { initTaskModal } from "./task-modal.js";
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         initScheduler();
         initTaskModal();
         initLogModal();
+        initAuditFilters();
         initPagination(loadTasks, loadAllLogs);
       }
       initMessageModal();

@@ -28,6 +28,7 @@
         <button type="button" class="nav-btn" data-page="logs">Логи</button>
         <button type="button" class="nav-btn" data-page="scheduler">Планировщик</button>
         <button type="button" class="nav-btn" data-page="task-types">Типы задач</button>
+        <button type="button" class="nav-btn" data-page="audit">Аудит</button>
         <button type="button" class="nav-btn" data-page="minesweeper">Сапёр</button>
         <button type="button" class="nav-btn" data-page="star-minesweeper">Сапёр — Звезда</button>
         <button type="button" class="nav-btn" data-page="color-lines">Цветные линии</button>
@@ -40,7 +41,6 @@
         <div class="toolbar metal-panel" id="tasks-toolbar">
           <button type="button" class="tool-btn" id="btn-new-task">Новая задача</button>
           <button type="button" class="tool-btn" id="btn-abort-task">Прервать задачу</button>
-          <button type="button" class="tool-btn" id="btn-delete-task">Удалить задачу</button>
         </div>
 
         <div class="toolbar metal-panel hidden" id="executors-toolbar">
@@ -172,6 +172,54 @@
             </div>
           </div>
 
+          <div class="page hidden" id="page-audit">
+            <div class="panel metal-panel">
+              <div class="panel-header">
+                <span class="panel-header-title">Журнал аудита</span>
+                <span class="panel-header-count" id="audit-header-count"></span>
+              </div>
+              <div class="audit-filters" style="padding: 12px 18px; display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: rgba(246,246,248,0.66);">
+                <div class="form-row" style="min-width: 180px;">
+                  <label for="audit-event-type">Тип события</label>
+                  <select id="audit-event-type">
+                    <option value="">Все</option>
+                    <option value="LOGIN_SUCCESSFUL">Успешный вход</option>
+                    <option value="TASK_CREATED">Задача создана</option>
+                    <option value="TASK_STATUS_CHANGED">Статус задачи изменён</option>
+                  </select>
+                </div>
+                <div class="form-row" style="min-width: 160px;">
+                  <label for="audit-username">Пользователь</label>
+                  <input type="text" id="audit-username" placeholder="Фильтр по имени">
+                </div>
+                <button type="button" class="win-btn" id="audit-apply-filter">Применить</button>
+                <button type="button" class="win-btn" id="audit-reset-filter">Сбросить</button>
+              </div>
+              <table class="audit-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Время</th>
+                    <th>Тип события</th>
+                    <th>Пользователь</th>
+                    <th>IP-адрес</th>
+                    <th>Роль</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-body"></tbody>
+              </table>
+              <div class="pagination-bar" id="audit-pagination">
+                <button type="button" class="pagination-btn" id="audit-page-prev">← Назад</button>
+                <label class="pagination-goto">
+                  Страница
+                  <input type="number" class="pagination-input" id="audit-page-input" min="1" value="1">
+                  из <span id="audit-page-total">1</span>
+                </label>
+                <button type="button" class="pagination-btn" id="audit-page-next">Вперёд →</button>
+              </div>
+            </div>
+          </div>
+
           <div class="page hidden" id="page-minesweeper">
             <div class="panel metal-panel minesweeper-window">
               <div class="panel-header">Сапёр</div>
@@ -297,7 +345,7 @@
               <p>
                 В разделе <strong>Задачи</strong> отображается таблица заданий.
                 Выберите строку щелчком мыши.
-                Панель инструментов позволяет создать, прервать или удалить задачу.
+                Панель инструментов позволяет создать или прервать задачу.
               </p>
               <p>
                 В разделе <strong>Исполнители</strong> — справочник сотрудников,
@@ -419,6 +467,50 @@
             </tr>
           </thead>
           <tbody id="log-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="audit-modal-overlay">
+    <div class="modal-window metal-panel audit-modal-window">
+      <div class="modal-header">
+        <span class="modal-title" id="audit-modal-title">Событие аудита</span>
+        <button type="button" class="modal-close-btn audit-modal-close-btn" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="modal-body modal-body-scroll">
+        <table class="audit-details-table">
+          <tbody>
+            <tr>
+              <th>Идентификатор</th>
+              <td id="audit-modal-id"></td>
+            </tr>
+            <tr>
+              <th>Время</th>
+              <td id="audit-modal-timestamp"></td>
+            </tr>
+            <tr>
+              <th>Тип события</th>
+              <td id="audit-modal-type"></td>
+            </tr>
+            <tr>
+              <th>Пользователь</th>
+              <td id="audit-modal-username"></td>
+            </tr>
+            <tr>
+              <th>IP-адрес</th>
+              <td id="audit-modal-ip"></td>
+            </tr>
+            <tr>
+              <th>Роль</th>
+              <td id="audit-modal-role"></td>
+            </tr>
+            <tr>
+              <th>Payload</th>
+              <td><pre class="audit-payload" id="audit-modal-payload"></pre></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

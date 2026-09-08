@@ -18,6 +18,10 @@
 			<artifactId>auth-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>ru.asocial</groupId>
+			<artifactId>audit-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>

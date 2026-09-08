@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ru.asocial.auth.jwt.JobflowJwtProperties;
 import ru.asocial.auth.jwt.JobflowJwtSupport;
+import ru.asocial.scheduler.TestKafkaConfig;
 
 @SpringBootTest(properties = {
 		"scheduler.enabled=false",
@@ -22,6 +24,7 @@ import ru.asocial.auth.jwt.JobflowJwtSupport;
 		"app.jwt.access-token-ttl=PT1H"
 })
 @AutoConfigureMockMvc
+@Import(TestKafkaConfig.class)
 class ScheduleSecurityTest {
 
 	@Autowired

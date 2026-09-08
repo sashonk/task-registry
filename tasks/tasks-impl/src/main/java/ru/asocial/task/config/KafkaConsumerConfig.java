@@ -44,4 +44,14 @@ public class KafkaConsumerConfig {
 		handler.setCommitRecovered(true);
 		return handler;
 	}
+
+	@Bean
+	public KafkaTemplate<String, String> auditKafkaTemplate(KafkaProperties properties) {
+		Map<String, Object> config = properties.buildProducerProperties();
+		config.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+				StringSerializer.class);
+		config.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+				StringSerializer.class);
+		return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(config));
+	}
 }

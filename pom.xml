@@ -20,6 +20,7 @@
 		<module>scheduler</module>
 		<module>gateway</module>
 		<module>auth</module>
+		<module>audit</module>
 	</modules>
 
 	<properties>
@@ -49,6 +50,11 @@
 			<dependency>
 				<groupId>ru.asocial</groupId>
 				<artifactId>auth-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ru.asocial</groupId>
+				<artifactId>audit-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 import ru.asocial.task.dto.TaskCreateCommand;
 
 @Configuration
+@ConditionalOnProperty(name = "app.kafka.enabled", havingValue = "true")
 public class KafkaProducerConfig {
 
 	@Bean
