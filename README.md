@@ -1,8 +1,8 @@
 # JobFlow (Task Registry)
 
-Распределённая система учёта фоновых и регламентных задач: очередь, исполнители-воркеры, планировщик (отдельный сервис), auth-service с JWT, журнал и веб-интерфейс через API Gateway.
+Распределённая система учёта фоновых и регламентных задач: очередь, исполнители-воркеры, планировщик (отдельный сервис), auth-service с JWT, сервис аудита, журнал и веб-интерфейс через API Gateway.
 
-## Архитектура (Фаза Auth)
+## Архитектура (Фаза Audit)
 
 | Сервис | Порт | Назначение |
 |--------|------|------------|
@@ -10,9 +10,13 @@
 | **tasks-impl** | 8081 | Задачи, исполнители, логи, Kafka consumer |
 | **scheduler-impl** | 8082 | Расписания, Kafka producer |
 | **auth-impl** | 8083 | Login, users, выдача JWT |
-| **Kafka** | 9092 | Команды `task.create` (локально или Docker) |
+| **audit-impl** | 8084 | Журнал аудита (события в Kafka → H2), API только для `ADMIN` |
+| **akhq** | 8088 | Веб-UI для Kafka (только Docker) |
+| **Kafka** | 9092 | Топики `task.create` и `audit` (локально или Docker) |
 
 Аутентификация — **JWT (HS256)** с общим секретом. UI хранит `accessToken` в `sessionStorage` и отправляет `Authorization: Bearer …` на все API-запросы.
+
+Аудит: auth-impl публикует события успешного входа (`LOGIN_SUCCESSFUL`), tasks-impl — создание задач (`TASK_CREATED`) и смену статуса (`TASK_STATUS_CHANGED`) в топик `audit`; audit-impl читает их и сохраняет в H2. Просмотр журнала — в UI (раздел «Аудит») или через API.
 
 ## Требования
 
@@ -34,7 +38,7 @@ mvn package
 docker compose up --build -d
 ```
 
-Поднимает Kafka (Redpanda), auth, tasks, scheduler и gateway. UI: http://localhost:8080
+Поднимает Kafka (Redpanda), akhq, auth, tasks, scheduler, audit и gateway. UI: http://localhost:8080
 
 Остановка:
 
@@ -42,9 +46,9 @@ docker compose up --build -d
 docker compose down
 ```
 
-Данные H2 сохраняются в named volumes (`auth-data`, `tasks-data`, `scheduler-data`). Полная очистка: `docker compose down -v`.
+Данные H2 сохраняются в named volumes (`auth-data`, `tasks-data`, `scheduler-data`, `audit-data`). Полная очистка: `docker compose down -v`.
 
-Первый запуск собирает 4 Java-образа через Maven внутри Docker — может занять несколько минут.
+Первый запуск собирает 5 Java-образов через Maven внутри Docker — может занять несколько минут.
 
 JWT secret (опционально, для prod-like окружения):
 
@@ -79,7 +83,7 @@ docker compose up -d kafka
 
 #### 2. JWT secret (рекомендуется)
 
-Один и тот же секрет нужен **auth-impl**, **tasks-impl** и **scheduler-impl**:
+Один и тот же секрет нужен **auth-impl**, **tasks-impl**, **scheduler-impl** и **audit-impl**:
 
 ```bash
 # PowerShell
@@ -91,7 +95,7 @@ export APP_JWT_SECRET="your-256-bit-or-longer-secret-key-here!!"
 
 Если переменная не задана, используется dev-значение из `application.properties` (только для локальной разработки).
 
-#### 3. Backend-сервисы (4 терминала)
+#### 3. Backend-сервисы (5 терминалов)
 
 Запускайте из корня репозитория (чтобы `./data/*` были в одном месте):
 
@@ -99,6 +103,7 @@ export APP_JWT_SECRET="your-256-bit-or-longer-secret-key-here!!"
 mvn -pl auth/auth-impl spring-boot:run
 mvn -pl tasks/tasks-impl spring-boot:run
 mvn -pl scheduler/scheduler-impl spring-boot:run
+mvn -pl audit/audit-impl spring-boot:run
 mvn -pl gateway/gateway-impl spring-boot:run
 ```
 
@@ -132,9 +137,13 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/tasks
 # 3. С token → 200
 curl -s http://localhost:8080/api/tasks \
   -H "Authorization: Bearer <accessToken>"
+
+# 4. События аудита (только ADMIN)
+curl -s "http://localhost:8080/api/audit/events?page=1&size=20" \
+  -H "Authorization: Bearer <accessToken>"
 ```
 
-Роли: **VIEWER** — только GET; **ADMIN** — POST/PATCH/DELETE.
+Роли: **VIEWER** — только GET; **ADMIN** — POST/PATCH/DELETE и доступ к `/api/audit/**`.
 
 ## Структура monorepo
 
@@ -146,6 +155,8 @@ jobflow/
 ├── tasks/tasks-impl      — registry + workers
 ├── scheduler/scheduler-api
 ├── scheduler/scheduler-impl
+├── audit/audit-api       — AuditEventPayload (события аудита)
+├── audit/audit-impl      — Kafka consumer, хранение в H2, API аудита
 └── gateway/gateway-impl  — UI + Gateway
 ```
 
@@ -175,7 +186,3 @@ Docker Hub с 2024 года ограничивает доступ с росси�
 Альтернатива: `https://dh-mirror.gitverse.ru`. Не добавляйте несколько зеркал сразу — нерабочие могут зависать при pull. Нажмите **Apply & restart**.
 
 3. **Без Docker** — можно поднять Kafka локально (см. [Apache Kafka quickstart](https://kafka.apache.org/quickstart)) и указать `spring.kafka.bootstrap-servers=localhost:9092` в сервисах.
-
-## Автор
-
-Кисоржевский Александр Дмитриевич — [ВКонтакте](https://vk.com/id13061960).

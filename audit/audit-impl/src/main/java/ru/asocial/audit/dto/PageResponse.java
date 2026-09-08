@@ -1,0 +1,25 @@
+package ru.asocial.audit.dto;
+
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
+public record PageResponse<T>(List<T> content, int page, int size, long totalElements, int totalPages) {
+
+    public static <T> PageResponse<T> from(Page<T> page) {
+        return new PageResponse<>(
+                page.getContent(),
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages());
+    }
+
+    public static int normalizePage(int page) {
+        return Math.max(1, page);
+    }
+
+    public static int normalizeSize(int size) {
+        return Math.min(Math.max(1, size), 100);
+    }
+}
