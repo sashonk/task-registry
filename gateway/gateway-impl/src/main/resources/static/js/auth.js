@@ -58,7 +58,11 @@ export async function logout() {
 export function applyRoleRestrictions() {
   document.querySelectorAll(".nav-btn").forEach(btn => {
     const isGamePage = GAME_PAGES.includes(btn.dataset.page);
-    btn.classList.toggle("hidden", isPlay() ? !isGamePage : isGamePage);
+    const isAuditPage = btn.dataset.page === "audit";
+    const hidden = isPlay()
+      ? !isGamePage
+      : isGamePage || (isAuditPage && !isAdmin());
+    btn.classList.toggle("hidden", hidden);
   });
 
   if (isAdmin()) {

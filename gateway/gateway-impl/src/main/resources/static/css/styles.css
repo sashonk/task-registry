@@ -272,6 +272,7 @@ a {
 .nav-btn[data-page="logs"]::before { content: "≡"; }
 .nav-btn[data-page="scheduler"]::before { content: "◷"; }
 .nav-btn[data-page="task-types"]::before { content: "{ }"; font-size: 11px; }
+.nav-btn[data-page="audit"]::before { content: "▤"; }
 .nav-btn[data-page="help"]::before { content: "?"; }
 
 .nav-btn:hover:not(.active) {
@@ -1558,10 +1559,15 @@ body {
 }
 
 .nav-btn:active,
+.nav-btn:hover:active,
 .tool-btn:active,
+.tool-btn:hover:active,
 .win-btn:active,
+.win-btn:hover:active,
 .pagination-btn:active,
-.batch-step-action:active {
+.pagination-btn:hover:active,
+.batch-step-action:active,
+.batch-step-action:hover:active {
   padding-top: 8px;
   padding-bottom: 6px;
   border-color: #000000 #ffffff #ffffff #000000;

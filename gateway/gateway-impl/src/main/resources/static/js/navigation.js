@@ -13,7 +13,7 @@ import { closeLogModal } from "./logs.js";
 
 export function showPage(page) {
   const isGamePage = GAME_PAGES.includes(page);
-  if ((isPlay() && !isGamePage) || (!isPlay() && isGamePage)) {
+  if ((isPlay() && !isGamePage) || (!isPlay() && isGamePage) || (page === "audit" && !isAdmin())) {
     page = getDefaultPage();
   }
 
